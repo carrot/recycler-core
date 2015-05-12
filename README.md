@@ -109,7 +109,7 @@ public class UserController extends RecyclerCoreController<UserModel> {
 
 ### Registering
 
-Now that we have a fully implemented list item, we can now register the model to our custom adapter.
+Now that we have a fully implemented list item, we can now create an adapter + register the model.
 
 ```java
 // ...
@@ -123,7 +123,8 @@ public class MyAdapter extends RecyclerCoreAdapter {
     @Override
     protected void registerModels()
     {
-        registerModel(new UserModel());
+        registerModel(new UserModel()); // <---- Registration
+        // Here you would register other elements
     }
 
 }
