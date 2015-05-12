@@ -165,6 +165,6 @@ RecyclerCore also provides a custom view called `ProgressRecyclerView`.  This is
 
 I pretty much never use RecyclerViews that aren't encapsulated inside this pattern so I decided to include it in this library.
 
-### License
+## License
 
 [MIT](license.txt)
