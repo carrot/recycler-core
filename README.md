@@ -156,3 +156,15 @@ mRecyclerView.setAdapter(adapter);
 And now you have:
 
 ![img](http://i.imgur.com/NP7Wboq.png)
+
+## Extras
+
+### ProgressRecyclerView
+
+RecyclerCore also provides a custom view called `ProgressRecyclerView`.  This is just a `RecyclerView` with a `ProgressBar` inside of a `RelativeLayout` and it manages displaying the `ProgressBar` when the adapter is set.
+
+I pretty much never use RecyclerViews that aren't encapsulated inside this pattern so I decided to include it in this library.
+
+### License
+
+[MIT](license.txt)
