@@ -69,6 +69,8 @@ public class UserModel extends RecyclerCoreModel {
         View rootView = inflater.inflate(R.layout.element_user, parent, false);
         return new UserController(rootView, activity);
     }
+    
+    // ... Setters + Getters
 
 }
 ```
@@ -98,8 +100,8 @@ public class UserController extends RecyclerCoreController<UserModel> {
     @Override
     public void bind(UserModel model)
     {
-        mName.setText(model.mName);
-        mEmail.setText(model.mEmail);
+        mName.setText(model.getName());
+        mEmail.setText(model.getEmail());
     }
 
 }
@@ -149,3 +151,7 @@ TestAdapter adapter = new TestAdapter(models, this);
 mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 mRecyclerView.setAdapter(adapter);
 ```
+
+And now you have:
+
+![img](http://i.imgur.com/NP7Wboq.png)
