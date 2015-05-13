@@ -43,8 +43,8 @@ public class ProgressRecyclerView extends RelativeLayout {
 
     private void findViews()
     {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mRecyclerView = (RecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */
