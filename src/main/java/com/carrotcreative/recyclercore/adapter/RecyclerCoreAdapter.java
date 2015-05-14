@@ -9,7 +9,7 @@ import com.carrotcreative.recyclercore.util.InstantiationUtil;
 import java.util.HashMap;
 import java.util.List;
 
-public abstract class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>{
+public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>{
 
     protected Activity mActivity;
     private List<RecyclerCoreModel> mModelList;
