@@ -16,7 +16,8 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     private HashMap<Integer, RecyclerCoreModel> mRegisteredModels;
 
     /**
-     * If the models in the adapter change, register for the new models
+     * If the models in the adapter change, register for the new models.
+     * FYI : onChanged() gets called twice - not sure why.
      */
     private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver()
     {
