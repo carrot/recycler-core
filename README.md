@@ -50,6 +50,8 @@ The View is a standard Layout XML file with nothing special about it.
 
 Next I create the model.  The model is a standard POJO that must extend `RecyclerCoreModel` which has you implement `buildController`.
 
+Your model must also have a public no-argument constructor.  This is the default in Java, so if you've implented no constructors you are also safe.
+
 The Model + Controller are (justifiably) very coupled, so you'll need to build the controller before jumping into that method.
 
 I'm still going to write it here, but you'll need to jump back up after you've checked out the controller for everything to make sense.
@@ -69,7 +71,7 @@ public class UserModel extends RecyclerCoreModel {
         View rootView = inflater.inflate(R.layout.element_user, parent, false);
         return new UserController(rootView, activity);
     }
-    
+
     // ... Setters + Getters
 
 }
@@ -82,6 +84,8 @@ Now we create the controller.
 This class must extend `RecyclerCoreController` with the generic of the model that was just created.
 
 The magic happens in the `bind` method, where this object will be passed an instance of the model.
+
+`UserController.java`:
 
 ```java
 // ...
@@ -107,32 +111,9 @@ public class UserController extends RecyclerCoreController<UserModel> {
 }
 ```
 
-### Registering
-
-Now that we have a fully implemented list item, we can now create an adapter + register the model.
-
-```java
-// ...
-public class MyAdapter extends RecyclerCoreAdapter {
-
-    public MyAdapter(List<RecyclerCoreModel> modelList, Activity activity)
-    {
-        super(modelList, activity);
-    }
-
-    @Override
-    protected void registerModels()
-    {
-        registerModel(new UserModel()); // <---- Registration
-        // Here you would register other elements
-    }
-
-}
-```
-
 ### In use
 
-Now that we have our view registered to the adapter, we can now use it.
+`MainActivity.java`:
 
 ```java
 // ...
@@ -148,7 +129,7 @@ UserModel rob = new UserModel()
         .setName("Rob");
 models.add(rob);
 
-TestAdapter adapter = new TestAdapter(models, this);
+RecyclerCoreAdapter adapter = new RecyclerCoreAdapter(models, this);
 mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 mRecyclerView.setAdapter(adapter);
 ```
