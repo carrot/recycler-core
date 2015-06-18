@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -64,7 +65,7 @@ public class ProgressRecyclerView extends RelativeLayout {
     private void setDefaultAdapter()
     {
         ArrayList<RecyclerCoreModel> models = new ArrayList<>();
-        setAdapter(new RecyclerCoreAdapter(models, mRecyclerView.getContext()));
+        mRecyclerView.setAdapter(new RecyclerCoreAdapter(models, mRecyclerView.getContext()));
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */
@@ -73,66 +74,10 @@ public class ProgressRecyclerView extends RelativeLayout {
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
-    /** Wrapper for {@link RecyclerView#getLayoutManager()} */
-    public RecyclerView.LayoutManager getLayoutManager()
-    {
-        return mRecyclerView.getLayoutManager();
-    }
-
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
     public void setAdapter(RecyclerView.Adapter adapter)
     {
-        if(mRecyclerView.getAdapter() != adapter)
-        {
-            if(mRecyclerView.getAdapter() != null)
-            {
-                mRecyclerView.getAdapter().unregisterAdapterDataObserver(mDataSetObserver);
-            }
-
-            mRecyclerView.setAdapter(adapter);
-            setProgressBarVisibility();
-            adapter.registerAdapterDataObserver(mDataSetObserver);
-        }
-    }
-
-    /** Wrapper for {@link RecyclerView#getAdapter()} */
-    public RecyclerView.Adapter getAdapter()
-    {
-        return mRecyclerView.getAdapter();
-    }
-
-    /**
-     * An observer that manages the visibility state of the ProgressBar
-     */
-    private RecyclerView.AdapterDataObserver mDataSetObserver = new RecyclerView.AdapterDataObserver()
-    {
-        @Override
-        public void onChanged()
-        {
-            super.onChanged();
-            setProgressBarVisibility();
-        }
-    };
-
-    private void setProgressBarVisibility()
-    {
-        if(mRecyclerView.getAdapter().getItemCount() > 0)
-        {
-            mProgressBar.setVisibility(GONE);
-        }
-        else
-        {
-            mProgressBar.setVisibility(VISIBLE);
-        }
-    }
-
-    @Override
-    protected void onDetachedFromWindow()
-    {
-        super.onDetachedFromWindow();
-        if(mRecyclerView != null && mRecyclerView.getAdapter() != null)
-        {
-            mRecyclerView.getAdapter().unregisterAdapterDataObserver(mDataSetObserver);
-        }
+        mRecyclerView.setAdapter(adapter);
+        mProgressBar.setVisibility(GONE);
     }
 }
