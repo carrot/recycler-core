@@ -15,22 +15,22 @@ import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
 
 import java.util.ArrayList;
 
-public class ProgressRecyclerView extends RelativeLayout {
+public class ProgressRecyclerViewLayout extends RelativeLayout {
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
 
-    public ProgressRecyclerView(Context context)
+    public ProgressRecyclerViewLayout(Context context)
     {
         this(context, null);
     }
 
-    public ProgressRecyclerView(Context context, AttributeSet attrs)
+    public ProgressRecyclerViewLayout(Context context, AttributeSet attrs)
     {
         this(context, attrs, 0);
     }
 
-    public ProgressRecyclerView(Context context, AttributeSet attrs, int defStyleAttr)
+    public ProgressRecyclerViewLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
 
