@@ -1,17 +1,17 @@
 package com.carrotcreative.recyclercore.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 public abstract class RecyclerCoreController<Model extends RecyclerCoreModel> extends RecyclerView.ViewHolder {
 
-    protected Activity mActivity;
+    protected Context mContext;
 
-    public RecyclerCoreController(View itemView, Activity activity)
+    public RecyclerCoreController(View itemView, Context context)
     {
         super(itemView);
-        mActivity = activity;
+        mContext = context;
     }
 
     public abstract void bind(Model model);
