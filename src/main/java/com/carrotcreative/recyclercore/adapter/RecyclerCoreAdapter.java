@@ -1,6 +1,6 @@
 package com.carrotcreative.recyclercore.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>{
 
-    protected Activity mActivity;
+    protected Context mContext;
     private List<RecyclerCoreModel> mModelList;
     private HashMap<Integer, RecyclerCoreModel> mRegisteredModels;
 
@@ -29,10 +29,10 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
         }
     };
 
-    public RecyclerCoreAdapter(List<RecyclerCoreModel> modelList, Activity activity)
+    public RecyclerCoreAdapter(List<RecyclerCoreModel> modelList, Context context)
     {
         mModelList = modelList;
-        mActivity = activity;
+        mContext = context;
         mRegisteredModels = new HashMap<>();
         registerModels();
         registerAdapterDataObserver(mDataObserver);
@@ -56,14 +56,14 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     @Override
     public RecyclerCoreController onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        LayoutInflater inflater = LayoutInflater.from(mActivity);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
 
         for(Integer registeredType : mRegisteredModels.keySet())
         {
             if(registeredType == viewType)
             {
                 RecyclerCoreModel model = mRegisteredModels.get(registeredType);
-                return model.buildController(inflater, parent, mActivity);
+                return model.buildController(inflater, parent, mContext);
             }
         }
 

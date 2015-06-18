@@ -1,13 +1,19 @@
 package com.carrotcreative.recyclercore.widget;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.carrotcreative.recyclercore.R;
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
+
+import java.util.ArrayList;
 
 public class ProgressRecyclerView extends RelativeLayout {
 
@@ -39,12 +45,27 @@ public class ProgressRecyclerView extends RelativeLayout {
     {
         super.onFinishInflate();
         findViews();
+        setDefaultLayoutManager();
+        setDefaultAdapter();
     }
 
     private void findViews()
     {
         mRecyclerView = (RecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
+    }
+
+    private void setDefaultLayoutManager()
+    {
+        LinearLayoutManager manager = new LinearLayoutManager(mRecyclerView.getContext());
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(manager);
+    }
+
+    private void setDefaultAdapter()
+    {
+        ArrayList<RecyclerCoreModel> models = new ArrayList<>();
+        mRecyclerView.setAdapter(new RecyclerCoreAdapter(models, mRecyclerView.getContext()));
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */
@@ -59,5 +80,4 @@ public class ProgressRecyclerView extends RelativeLayout {
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);
     }
-
 }
