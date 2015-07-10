@@ -80,4 +80,10 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);
     }
+
+    public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
+    {
+        mRecyclerView.setOnScrollListener(scrollListener);
+    }
+
 }
