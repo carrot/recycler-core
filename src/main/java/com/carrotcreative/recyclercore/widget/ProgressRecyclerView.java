@@ -65,4 +65,18 @@ public class ProgressRecyclerView extends RelativeLayout {
         mRecyclerView.setOnScrollListener(scrollListener);
     }
 
+    public boolean contains(RecyclerView recyclerView)
+    {
+        if(mRecyclerView == recyclerView)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void scrollRecyclerViewBy(int dx, int dy)
+    {
+        mRecyclerView.scrollBy(dy, dy);
+    }
 }
