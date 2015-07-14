@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -65,7 +64,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     private void setDefaultAdapter()
     {
         ArrayList<RecyclerCoreModel> models = new ArrayList<>();
-        mRecyclerView.setAdapter(new RecyclerCoreAdapter(models, mRecyclerView.getContext()));
+        mRecyclerView.setAdapter(new RecyclerCoreAdapter(models));
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */

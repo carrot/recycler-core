@@ -6,12 +6,21 @@ import android.view.View;
 
 public abstract class RecyclerCoreController<Model extends RecyclerCoreModel> extends RecyclerView.ViewHolder {
 
-    protected Context mContext;
+    private Context mContext;
 
-    public RecyclerCoreController(View itemView, Context context)
+    public RecyclerCoreController(View itemView)
     {
         super(itemView);
-        mContext = context;
+        mContext = itemView.getContext();
+    }
+
+    /**
+     * A helper method to get the context in the controller.
+     * @return The context of the view.
+     */
+    public Context getContext()
+    {
+        return mContext;
     }
 
     public abstract void bind(Model model);
