@@ -99,4 +99,9 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     {
         mRecyclerView.scrollBy(dy, dy);
     }
+
+    public void scrollRecyclerViewToTop()
+    {
+        mRecyclerView.getLayoutManager().scrollToPosition(0);
+    }
 }
