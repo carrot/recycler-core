@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -18,6 +20,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private FrameLayout mEmptyStateContainer;
 
     public ProgressRecyclerViewLayout(Context context)
     {
@@ -52,6 +55,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     {
         mRecyclerView = (RecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
+        mEmptyStateContainer = (FrameLayout) findViewById(R.id.progress_recycler_view_empty_state_container);
     }
 
     private void setDefaultLayoutManager()
@@ -116,5 +120,26 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     public void stopScroll()
     {
         mRecyclerView.stopScroll();
+    }
+
+    // =================================== //
+    // ========== Empty States =========== //
+    // =================================== //
+
+    public void setEmptyStateView(View emptyStateView)
+    {
+        mEmptyStateContainer.addView(emptyStateView);
+    }
+
+    public void showEmptyState(boolean visible)
+    {
+        if(visible)
+        {
+            mEmptyStateContainer.setVisibility(VISIBLE);
+        }
+        else
+        {
+            mEmptyStateContainer.setVisibility(GONE);
+        }
     }
 }
