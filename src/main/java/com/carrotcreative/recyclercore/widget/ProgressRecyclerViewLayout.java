@@ -131,7 +131,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         mEmptyStateContainer.addView(emptyStateView);
     }
 
-    public void showEmptyState(boolean visible)
+    public void setEmptyStateVisible(boolean visible)
     {
         if(visible)
         {
