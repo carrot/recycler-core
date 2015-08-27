@@ -101,7 +101,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         mAdapter = adapter;
 
         /**
-         * Regiter the dataset observer
+         * Register the dataset observer
          */
         mAdapter.registerAdapterDataObserver(mDataObserver);
         mRecyclerView.setAdapter(mAdapter);
@@ -180,7 +180,6 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
 
         /**
          * If adapter not set do not show the empty state.
-         * Or if trying to hide the empty state.
          */
         if(mAdapter == null || mAdapter.getItemCount() != 0 || visible == false)
         {
