@@ -21,6 +21,24 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private FrameLayout mEmptyStateContainer;
+    private RecyclerView.Adapter mAdapter;
+    private View mEmptyStateView;
+
+    private boolean mEmptyStateVisible = false;
+
+    /**
+     * An observer to listen for changes in the data and check if it needs to display the
+     * empty state.
+     */
+    private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver()
+    {
+        @Override
+        public void onChanged()
+        {
+            super.onChanged();
+            setEmptyStateEnabled(mEmptyStateVisible);
+        }
+    };
 
     public ProgressRecyclerViewLayout(Context context)
     {
@@ -80,8 +98,15 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
     public void setAdapter(RecyclerView.Adapter adapter)
     {
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = adapter;
+
+        /**
+         * Regiter the dataset observer
+         */
+        mAdapter.registerAdapterDataObserver(mDataObserver);
+        mRecyclerView.setAdapter(mAdapter);
         mProgressBar.setVisibility(GONE);
+        setEmptyStateEnabled(mEmptyStateVisible);
     }
 
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
@@ -126,14 +151,64 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     // ========== Empty States =========== //
     // =================================== //
 
+    /**
+     *
+     * @param emptyStateView The view that will be shown then the item count in the adapter is 0
+     */
     public void setEmptyStateView(View emptyStateView)
     {
+        /**
+         * If there is already an emplty state view, replace it.
+         */
+        if(mEmptyStateView != null)
+        {
+            mEmptyStateContainer.removeView(mEmptyStateView);
+        }
+        mEmptyStateView = emptyStateView;
         mEmptyStateContainer.addView(emptyStateView);
     }
 
-    public void setEmptyStateVisible(boolean visible)
+    /**
+     *
+     * @param visible true if you want to show the empty state, false other wise.
+     *                This will show the empty state only if the item count in adapter is 0.
+     *                If you want to skip item count, use #forceShowEmptyState()
+     */
+    public void setEmptyStateEnabled(boolean visible)
     {
-        if(visible)
+        mEmptyStateVisible = visible;
+
+        /**
+         * If adapter not set do not show the empty state.
+         * Or if trying to hide the empty state.
+         */
+        if(mAdapter == null || mAdapter.getItemCount() != 0 || visible == false)
+        {
+            if(mEmptyStateContainer.getVisibility() == VISIBLE)
+            {
+                mEmptyStateContainer.setVisibility(GONE);
+            }
+        }
+        else if(mAdapter.getItemCount() == 0)
+        {
+            showEmptyState();
+        }
+    }
+
+    /**
+     * The empty state is shown if the number of items in the adapter are 0.
+     * If you want to force show the Empty state, call this functions.
+     * Please keep in mind that when you set the Adapter, the empty state internal
+     * state is changed.
+     */
+    public void forceShowEmptyState()
+    {
+        showEmptyState();
+    }
+
+    private void showEmptyState()
+    {
+        if(mEmptyStateVisible)
         {
             mEmptyStateContainer.setVisibility(VISIBLE);
         }
