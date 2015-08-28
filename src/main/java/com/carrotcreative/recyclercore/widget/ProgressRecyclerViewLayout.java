@@ -190,7 +190,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         }
         else if(mAdapter.getItemCount() == 0)
         {
-            showEmptyState();
+            updateEmptyStateVisibility();
         }
     }
 
@@ -202,10 +202,10 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
      */
     public void forceShowEmptyState()
     {
-        showEmptyState();
+        updateEmptyStateVisibility();
     }
 
-    private void showEmptyState()
+    private void updateEmptyStateVisibility()
     {
         if(mEmptyStateVisible)
         {
