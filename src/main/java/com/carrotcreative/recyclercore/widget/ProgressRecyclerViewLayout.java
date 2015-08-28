@@ -24,7 +24,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     private RecyclerView.Adapter mAdapter;
     private View mEmptyStateView;
 
-    private boolean mEmptyStateVisible = false;
+    private boolean mEmptyStateEnabled = false;
 
     /**
      * An observer to listen for changes in the data and check if it needs to display the
@@ -36,7 +36,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         public void onChanged()
         {
             super.onChanged();
-            setEmptyStateEnabled(mEmptyStateVisible);
+            setEmptyStateEnabled(mEmptyStateEnabled);
         }
     };
 
@@ -106,7 +106,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         mAdapter.registerAdapterDataObserver(mDataObserver);
         mRecyclerView.setAdapter(mAdapter);
         mProgressBar.setVisibility(GONE);
-        setEmptyStateEnabled(mEmptyStateVisible);
+        setEmptyStateEnabled(mEmptyStateEnabled);
     }
 
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
@@ -166,22 +166,23 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         }
         mEmptyStateView = emptyStateView;
         mEmptyStateContainer.addView(emptyStateView);
+        setEmptyStateEnabled(true);
     }
 
     /**
      *
-     * @param visible true if you want to show the empty state, false other wise.
+     * @param enable true if you want to show the empty state, false other wise.
      *                This will show the empty state only if the item count in adapter is 0.
      *                If you want to skip item count, use #forceShowEmptyState()
      */
-    public void setEmptyStateEnabled(boolean visible)
+    private void setEmptyStateEnabled(boolean enable)
     {
-        mEmptyStateVisible = visible;
+        mEmptyStateEnabled = enable;
 
         /**
          * If adapter not set do not show the empty state.
          */
-        if(mAdapter == null || mAdapter.getItemCount() != 0 || visible == false)
+        if(mAdapter == null || mAdapter.getItemCount() != 0 || enable == false)
         {
             if(mEmptyStateContainer.getVisibility() == VISIBLE)
             {
@@ -194,20 +195,9 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
         }
     }
 
-    /**
-     * The empty state is shown if the number of items in the adapter are 0.
-     * If you want to force show the Empty state, call this functions.
-     * Please keep in mind that when you set the Adapter, the empty state internal
-     * state is changed.
-     */
-    public void forceShowEmptyState()
-    {
-        updateEmptyStateVisibility();
-    }
-
     private void updateEmptyStateVisibility()
     {
-        if(mEmptyStateVisible)
+        if(mEmptyStateEnabled)
         {
             mEmptyStateContainer.setVisibility(VISIBLE);
         }
