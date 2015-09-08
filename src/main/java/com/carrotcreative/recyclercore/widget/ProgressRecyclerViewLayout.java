@@ -112,4 +112,9 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
             mRecyclerView.getLayoutManager().scrollToPosition(mRecyclerView.getAdapter().getItemCount()-1);
         }
     }
+
+    public void stopScroll()
+    {
+        mRecyclerView.stopScroll();
+    }
 }
