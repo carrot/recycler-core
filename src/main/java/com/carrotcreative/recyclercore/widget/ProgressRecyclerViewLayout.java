@@ -82,7 +82,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
 
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
     {
-        mRecyclerView.setOnScrollListener(scrollListener);
+        mRecyclerView.addOnScrollListener(scrollListener);
     }
 
     public boolean contains(RecyclerView recyclerView)
