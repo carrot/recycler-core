@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -18,6 +20,25 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
 
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
+    private FrameLayout mEmptyStateContainer;
+    private RecyclerView.Adapter mAdapter;
+    private View mEmptyStateView;
+
+    private boolean mEmptyStateEnabled = false;
+
+    /**
+     * An observer to listen for changes in the data and check if it needs to display the
+     * empty state.
+     */
+    private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver()
+    {
+        @Override
+        public void onChanged()
+        {
+            super.onChanged();
+            setEmptyStateEnabled(mEmptyStateEnabled);
+        }
+    };
 
     public ProgressRecyclerViewLayout(Context context)
     {
@@ -52,6 +73,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     {
         mRecyclerView = (RecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
+        mEmptyStateContainer = (FrameLayout) findViewById(R.id.progress_recycler_view_empty_state_container);
     }
 
     private void setDefaultLayoutManager()
@@ -76,8 +98,15 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
     public void setAdapter(RecyclerView.Adapter adapter)
     {
-        mRecyclerView.setAdapter(adapter);
+        mAdapter = adapter;
+
+        /**
+         * Register the dataset observer
+         */
+        mAdapter.registerAdapterDataObserver(mDataObserver);
+        mRecyclerView.setAdapter(mAdapter);
         mProgressBar.setVisibility(GONE);
+        setEmptyStateEnabled(mEmptyStateEnabled);
     }
 
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
@@ -116,5 +145,65 @@ public class ProgressRecyclerViewLayout extends RelativeLayout {
     public void stopScroll()
     {
         mRecyclerView.stopScroll();
+    }
+
+    // =================================== //
+    // ========== Empty States =========== //
+    // =================================== //
+
+    /**
+     *
+     * @param emptyStateView The view that will be shown then the item count in the adapter is 0
+     */
+    public void setEmptyStateView(View emptyStateView)
+    {
+        /**
+         * If there is already an emplty state view, replace it.
+         */
+        if(mEmptyStateView != null)
+        {
+            mEmptyStateContainer.removeView(mEmptyStateView);
+        }
+        mEmptyStateView = emptyStateView;
+        mEmptyStateContainer.addView(emptyStateView);
+        setEmptyStateEnabled(true);
+    }
+
+    /**
+     *
+     * @param enable true if you want to show the empty state, false other wise.
+     *                This will show the empty state only if the item count in adapter is 0.
+     *                If you want to skip item count, use #forceShowEmptyState()
+     */
+    private void setEmptyStateEnabled(boolean enable)
+    {
+        mEmptyStateEnabled = enable;
+
+        /**
+         * If adapter not set do not show the empty state.
+         */
+        if(mAdapter == null || mAdapter.getItemCount() != 0 || enable == false)
+        {
+            if(mEmptyStateContainer.getVisibility() == VISIBLE)
+            {
+                mEmptyStateContainer.setVisibility(GONE);
+            }
+        }
+        else if(mAdapter.getItemCount() == 0)
+        {
+            updateEmptyStateVisibility();
+        }
+    }
+
+    private void updateEmptyStateVisibility()
+    {
+        if(mEmptyStateEnabled)
+        {
+            mEmptyStateContainer.setVisibility(VISIBLE);
+        }
+        else
+        {
+            mEmptyStateContainer.setVisibility(GONE);
+        }
     }
 }
