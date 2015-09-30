@@ -129,6 +129,10 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     // =============  Error State =============== //
     // ========================================== //
 
+    /**
+     *
+     * @return True if the errorStateView is set and is Visible.
+     */
     public boolean isErrorStateEnabled()
     {
         if(mErrorStateView != null && mErrorStateView.getVisibility() == View.VISIBLE)
@@ -138,6 +142,13 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         return false;
     }
 
+    /**
+     *
+     * @param enable True to show the error state
+     *               False to hide the error state.
+     *               Throws and #IllegalStateException if the error view is not set.
+     *               Set the error view using #setErrorView
+     */
     public void setErrorStateEnabled(boolean enable)
     {
         if(mErrorStateView == null)
@@ -163,7 +174,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
     /**
      *
-     * @param errorView The error view that will be displayed then we call the method
+     * @param errorView The error view that will be displayed when we call the method
      *                  #setErrorStateEnabled true.
      */
     public void setErrorView(View errorView)
