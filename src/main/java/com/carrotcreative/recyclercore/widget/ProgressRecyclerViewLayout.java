@@ -23,7 +23,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     private RecyclerView mRecyclerView;
     private ProgressBar mProgressBar;
     private View mErrorStateView;
-    private ViewVisibilityInstanceState mPrevViewVisibilityInstanceState;
+    private ViewVisibilityInstanceState mPrevViewVisibilityState;
 
     public ProgressRecyclerViewLayout(Context context)
     {
@@ -129,7 +129,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     // =============  Error State =============== //
     // ========================================== //
 
-    public boolean isShowingErrorState()
+    public boolean isErrorStateEnabled()
     {
         if(mErrorStateView != null && mErrorStateView.getVisibility() == View.VISIBLE)
         {
@@ -138,16 +138,16 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         return false;
     }
 
-    public void setErrorStateEnabled(boolean show)
+    public void setErrorStateEnabled(boolean enable)
     {
         if(mErrorStateView == null)
         {
             throw new IllegalStateException("Trying to setErrorStateEnabled without setting the error state View.");
         }
 
-        if(show)
+        if(enable)
         {
-            if(! isShowingErrorState())
+            if(! isErrorStateEnabled())
             {
                 saveCurrentViewState();
                 mErrorStateView.setVisibility(VISIBLE);
@@ -161,7 +161,12 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         }
     }
 
-    public void setErrorStateEnabled(View errorView, boolean show)
+    /**
+     *
+     * @param errorView The error view that will be displayed then we call the method
+     *                  #setErrorStateEnabled true.
+     */
+    public void setErrorView(View errorView)
     {
         if(mErrorStateView == null)
         {
@@ -177,29 +182,27 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
             mContainer.addView(mErrorStateView);
             mErrorStateView.setVisibility(GONE);
         }
-
-        setErrorStateEnabled(show);
     }
 
     private void saveCurrentViewState()
     {
-        if(mPrevViewVisibilityInstanceState == null)
+        if(mPrevViewVisibilityState == null)
         {
-            mPrevViewVisibilityInstanceState = new ViewVisibilityInstanceState();
+            mPrevViewVisibilityState = new ViewVisibilityInstanceState();
         }
 
-        mPrevViewVisibilityInstanceState.setProgressViewVisibility(mProgressBar.getVisibility());
-        mPrevViewVisibilityInstanceState.setRecyclerViewVisibility(mRecyclerView.getVisibility());
-        mPrevViewVisibilityInstanceState.setErrorViewVisibility(mErrorStateView.getVisibility());
+        mPrevViewVisibilityState.setProgressViewVisibility(mProgressBar.getVisibility());
+        mPrevViewVisibilityState.setRecyclerViewVisibility(mRecyclerView.getVisibility());
+        mPrevViewVisibilityState.setErrorViewVisibility(mErrorStateView.getVisibility());
     }
 
     private void restorePreviousViewState()
     {
-        if(mPrevViewVisibilityInstanceState != null)
+        if(mPrevViewVisibilityState != null)
         {
-            mRecyclerView.setVisibility(mPrevViewVisibilityInstanceState.getRecyclerViewVisibility());
-            mProgressBar.setVisibility(mPrevViewVisibilityInstanceState.getProgressViewVisibility());
-            mErrorStateView.setVisibility(mPrevViewVisibilityInstanceState.getErrorViewVisibility());
+            mRecyclerView.setVisibility(mPrevViewVisibilityState.getRecyclerViewVisibility());
+            mProgressBar.setVisibility(mPrevViewVisibilityState.getProgressViewVisibility());
+            mErrorStateView.setVisibility(mPrevViewVisibilityState.getErrorViewVisibility());
         }
     }
 
