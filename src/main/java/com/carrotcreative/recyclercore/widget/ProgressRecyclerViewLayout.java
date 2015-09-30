@@ -313,9 +313,12 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
      */
     private void setEmptyStateEnabled(boolean enable)
     {
+        /**
+         * If the empty state view is not set, do an early return.
+         */
         if(mEmptyStateView == null)
         {
-            throw new IllegalStateException("Trying to setEmptyStateEnabled without setting the empty state View.");
+            return;
         }
 
         if(enable)
