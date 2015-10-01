@@ -104,7 +104,8 @@ public class InstantiationUtil
 
         if(controllerInstance == null)
         {
-            throw new IllegalArgumentException("class " + className + " does not have a public no-argument constructor!");
+            throw new IllegalArgumentException("class " + className + " does not have a valid public constructor! " +
+                    "The constructor should take only View as an argument.");
         }
 
         return controllerInstance;
