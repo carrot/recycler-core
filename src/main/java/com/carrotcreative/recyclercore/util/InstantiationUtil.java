@@ -1,5 +1,11 @@
 package com.carrotcreative.recyclercore.util;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
 
 import java.lang.reflect.Constructor;
@@ -56,5 +62,51 @@ public class InstantiationUtil
         }
 
         return modelInstance;
+    }
+
+    public static RecyclerCoreController instantiateController(Class<?> controllerClass, int resource, ViewGroup parent)
+    {
+        String className = controllerClass.getCanonicalName();
+        Constructor<?>[] consArray = controllerClass.getConstructors();
+        Constructor defaultConstructor = null;
+        for (Constructor constructor : consArray)
+        {
+            int argCount = constructor.getParameterTypes().length;
+            if (argCount == 1)
+            {
+                defaultConstructor = constructor;
+                break;
+            }
+        }
+
+        RecyclerCoreController controllerInstance = null;
+        if (defaultConstructor != null)
+        {
+            try
+            {
+                Context context = parent.getContext();
+                View itemView = LayoutInflater.from(context).inflate(resource, parent, false);
+                controllerInstance = (RecyclerCoreController) defaultConstructor.newInstance(itemView);
+            }
+            catch (InstantiationException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+            catch (InvocationTargetException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if(controllerInstance == null)
+        {
+            throw new IllegalArgumentException("class " + className + " does not have a public no-argument constructor!");
+        }
+
+        return controllerInstance;
     }
 }

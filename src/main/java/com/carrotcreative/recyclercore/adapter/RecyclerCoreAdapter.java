@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.carrotcreative.recyclercore.inject.InjectController;
 import com.carrotcreative.recyclercore.util.InstantiationUtil;
 import java.util.HashMap;
 import java.util.List;
@@ -60,10 +61,16 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
             if(registeredType == viewType)
             {
                 RecyclerCoreModel model = mRegisteredModels.get(registeredType);
-                return model.buildController(inflater, parent);
+                /**
+                 * Inflate controller using the annotation methods
+                 */
+                InjectController injectController = model.getClass().getAnnotation(InjectController.class);
+                Class controllerClass = injectController.controller();
+                int layout = injectController.layout();
+                RecyclerCoreController coreController = InstantiationUtil.instantiateController(controllerClass, layout, parent);
+                return coreController;
             }
         }
-
         // Model hasn't been registered
         return null;
     }
