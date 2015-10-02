@@ -20,18 +20,12 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     private List<RecyclerCoreModel> mModelList;
 
     /**
-     * Keeps a mapping between the Model class and its corresponding #InjectController, so
-     * that we dont have to use reflection every time we need the Controller.
+     * Keeps a mapping between the Model class and its viewType
      */
-    private HashMap<Class<? extends RecyclerCoreModel>, InjectController> mMapModelController = new HashMap<>();
+    private HashMap<Class<? extends RecyclerCoreModel>, Integer> mModelViewTypeMap = new HashMap<>();
 
     /**
-     * Keeps a mapping between Controller and its view type. Used in #getItemViewType
-     * for fast lookup and return of the view type.
-     */
-    private HashMap<Class<? extends RecyclerCoreController>, Integer> mMapControllerViewType = new HashMap<>();
-
-    /**
+     * Keeps a mapping between the viewType and its corresponding #InjectController
      * A parse array for fast lookup, used in #onBindViewHolder to get the InjectController
      * from the viewType.
      */
@@ -73,22 +67,14 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
 
     private int getViewType(RecyclerCoreModel model)
     {
-        InjectController injectedController = mMapModelController.get(model.getClass());
-        if(injectedController == null)
-        {
-            injectedController = InstantiationUtil.getInjectedController(model);
-            mMapModelController.put(model.getClass(), injectedController);
-        }
-
-        Class classController = injectedController.controller();
-        Integer viewType = mMapControllerViewType.get(classController);
+        Integer viewType = mModelViewTypeMap.get(model.getClass());
         if(viewType == null)
         {
             viewType = mInjectControllerSparseArray.size() + 1;
-            mMapControllerViewType.put(classController, viewType);
-            mInjectControllerSparseArray.put(viewType, injectedController);
+            InjectController injectController = InstantiationUtil.getInjectedController(model);
+            mInjectControllerSparseArray.put(viewType, injectController);
+            mModelViewTypeMap.put(model.getClass(), viewType);
         }
-
         return viewType;
     }
 }
