@@ -1,12 +1,10 @@
 package com.carrotcreative.recyclercore.util;
 
-import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
+import com.carrotcreative.recyclercore.inject.InjectController;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -64,7 +62,7 @@ public class InstantiationUtil
         return modelInstance;
     }
 
-    public static RecyclerCoreController instantiateController(Class<?> controllerClass, int resource, ViewGroup parent)
+    public static RecyclerCoreController instantiateController(Class<?> controllerClass, View itemView)
     {
         String className = controllerClass.getCanonicalName();
         Constructor<?>[] consArray = controllerClass.getConstructors();
@@ -84,8 +82,7 @@ public class InstantiationUtil
         {
             try
             {
-                Context context = parent.getContext();
-                View itemView = LayoutInflater.from(context).inflate(resource, parent, false);
+
                 controllerInstance = (RecyclerCoreController) defaultConstructor.newInstance(itemView);
             }
             catch (InstantiationException e)
@@ -109,5 +106,17 @@ public class InstantiationUtil
         }
 
         return controllerInstance;
+    }
+
+    public static InjectController getInjectedController(RecyclerCoreModel model)
+    {
+        InjectController injectedController = model.getClass().getAnnotation(InjectController.class);
+        if(injectedController == null)
+        {
+            throw new IllegalStateException(" class " + model.getClass().getCanonicalName() + " " +
+                    " does not implement InjectController annotation");
+        }
+
+        return injectedController;
     }
 }
