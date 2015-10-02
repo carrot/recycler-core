@@ -1,78 +1,54 @@
 package com.carrotcreative.recyclercore.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.carrotcreative.recyclercore.inject.InjectController;
 import com.carrotcreative.recyclercore.util.InstantiationUtil;
+
 import java.util.HashMap;
 import java.util.List;
 
-public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>{
-
+public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>
+{
+    /**
+     * The list of #RecyclerCoreModel attached to this Adapter.
+     */
     private List<RecyclerCoreModel> mModelList;
-    private HashMap<Integer, RecyclerCoreModel> mRegisteredModels;
 
     /**
-     * If the models in the adapter change, register for the new models.
-     * FYI : onChanged() gets called twice - not sure why.
+     * Keeps a mapping between the Model class and its corresponding #InjectController, so
+     * that we dont have to use reflection every time we need the Controller.
      */
-    private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver()
-    {
-        @Override
-        public void onChanged()
-        {
-            registerModels();
-            super.onChanged();
-        }
-    };
+    private HashMap<Class<?>, InjectController> mMapModelController = new HashMap<>();
+
+    /**
+     * Keeps a mapping between Controller and its view type. Used in #getItemViewType
+     * for fast lookup and return of the view type.
+     */
+    private HashMap<Class<?>, Integer> mMapControllerViewType = new HashMap<>();
+
+    /**
+     * A parse array for fast lookup, used in #onBindViewHolder to get the InjectController
+     * from the viewType.
+     */
+    private SparseArray<InjectController> mInjectControllerSparseArray = new SparseArray<>();
 
     public RecyclerCoreAdapter(List<RecyclerCoreModel> modelList)
     {
         mModelList = modelList;
-        mRegisteredModels = new HashMap<>();
-        registerModels();
-        registerAdapterDataObserver(mDataObserver);
-    }
-
-    private void registerModels()
-    {
-        if(mModelList != null)
-        {
-            for(RecyclerCoreModel model: mModelList)
-            {
-                int key = model.getViewType().hashCode();
-                if( ! mRegisteredModels.containsKey(key) )
-                {
-                    mRegisteredModels.put(key, InstantiationUtil.instantiateModel(model.getClass()));
-                }
-            }
-        }
     }
 
     @Override
     public RecyclerCoreController onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-        for(Integer registeredType : mRegisteredModels.keySet())
-        {
-            if(registeredType == viewType)
-            {
-                RecyclerCoreModel model = mRegisteredModels.get(registeredType);
-                /**
-                 * Inflate controller using the annotation methods
-                 */
-                InjectController injectController = model.getClass().getAnnotation(InjectController.class);
-                Class controllerClass = injectController.controller();
-                int layout = injectController.layout();
-                RecyclerCoreController coreController = InstantiationUtil.instantiateController(controllerClass, layout, parent);
-                return coreController;
-            }
-        }
-        // Model hasn't been registered
-        return null;
+        InjectController injectController = mInjectControllerSparseArray.get(viewType);
+        View view = LayoutInflater.from(parent.getContext()).inflate(injectController.layout(),
+                parent, false);
+        return InstantiationUtil.instantiateController(injectController.controller(), view );
     }
 
     @Override
@@ -92,7 +68,27 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     public int getItemViewType(int position)
     {
         RecyclerCoreModel model = mModelList.get(position);
-        String modelViewType = model.getViewType();
-        return modelViewType.hashCode();
+        return getViewType(model);
+    }
+
+    private int getViewType(RecyclerCoreModel model)
+    {
+        InjectController injectedController = mMapModelController.get(model.getClass());
+        if(injectedController == null)
+        {
+            injectedController = InstantiationUtil.getInjectedController(model);
+            mMapModelController.put(model.getClass(), injectedController);
+        }
+
+        Class classController = injectedController.controller();
+        Integer viewType = mMapControllerViewType.get(classController);
+        if(viewType == null)
+        {
+            viewType = mInjectControllerSparseArray.size() + 1;
+            mMapControllerViewType.put(classController, viewType);
+            mInjectControllerSparseArray.put(viewType, injectedController);
+        }
+
+        return viewType;
     }
 }
