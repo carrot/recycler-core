@@ -23,13 +23,13 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
      * Keeps a mapping between the Model class and its corresponding #InjectController, so
      * that we dont have to use reflection every time we need the Controller.
      */
-    private HashMap<Class<?>, InjectController> mMapModelController = new HashMap<>();
+    private HashMap<Class<? extends RecyclerCoreModel>, InjectController> mMapModelController = new HashMap<>();
 
     /**
      * Keeps a mapping between Controller and its view type. Used in #getItemViewType
      * for fast lookup and return of the view type.
      */
-    private HashMap<Class<?>, Integer> mMapControllerViewType = new HashMap<>();
+    private HashMap<Class<? extends RecyclerCoreController>, Integer> mMapControllerViewType = new HashMap<>();
 
     /**
      * A parse array for fast lookup, used in #onBindViewHolder to get the InjectController

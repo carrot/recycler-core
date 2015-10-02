@@ -1,5 +1,7 @@
 package com.carrotcreative.recyclercore.inject;
 
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface InjectController
 {
-    Class<?> controller();
+    Class<? extends RecyclerCoreController> controller();
 
     int layout();
 }
