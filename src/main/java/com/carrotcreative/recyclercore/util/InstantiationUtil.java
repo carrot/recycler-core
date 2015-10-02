@@ -3,7 +3,6 @@ package com.carrotcreative.recyclercore.util;
 import android.view.View;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
 import com.carrotcreative.recyclercore.inject.InjectController;
 
 import java.lang.reflect.Constructor;
@@ -57,17 +56,5 @@ public class InstantiationUtil
         }
 
         return controllerInstance;
-    }
-
-    public static InjectController getInjectedController(RecyclerCoreModel model)
-    {
-        InjectController injectedController = model.getClass().getAnnotation(InjectController.class);
-        if(injectedController == null)
-        {
-            throw new IllegalStateException(" class " + model.getClass().getCanonicalName() + " " +
-                    " does not implement InjectController annotation");
-        }
-
-        return injectedController;
     }
 }
