@@ -12,12 +12,12 @@ import com.carrotcreative.recyclercore.util.InstantiationUtil;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecyclerCoreAdapter<T> extends RecyclerView.Adapter<RecyclerCoreController>
+public class RecyclerCoreAdapter<ModelType> extends RecyclerView.Adapter<RecyclerCoreController>
 {
     /**
      * The list of #RecyclerCoreModel attached to this Adapter.
      */
-    private List<T> mModelList;
+    private List<ModelType> mModelList;
 
     /**
      * Keeps a mapping between the Model class and its viewType
@@ -31,7 +31,7 @@ public class RecyclerCoreAdapter<T> extends RecyclerView.Adapter<RecyclerCoreCon
      */
     private SparseArray<InjectController> mInjectControllerSparseArray = new SparseArray<>();
 
-    public RecyclerCoreAdapter(List<T> modelList)
+    public RecyclerCoreAdapter(List<ModelType> modelList)
     {
         mModelList = modelList;
     }
@@ -48,7 +48,7 @@ public class RecyclerCoreAdapter<T> extends RecyclerView.Adapter<RecyclerCoreCon
     @Override
     public void onBindViewHolder(RecyclerCoreController holder, int position)
     {
-        T model = mModelList.get(position);
+        ModelType model = mModelList.get(position);
         holder.bind(model);
     }
 
@@ -61,11 +61,11 @@ public class RecyclerCoreAdapter<T> extends RecyclerView.Adapter<RecyclerCoreCon
     @Override
     public int getItemViewType(int position)
     {
-        T model = mModelList.get(position);
+        ModelType model = mModelList.get(position);
         return getViewType(model);
     }
 
-    private int getViewType(T model)
+    private int getViewType(ModelType model)
     {
         Integer viewType = mModelViewTypeMap.get(model.getClass());
         if(viewType == null)
@@ -78,7 +78,7 @@ public class RecyclerCoreAdapter<T> extends RecyclerView.Adapter<RecyclerCoreCon
         return viewType;
     }
 
-    private InjectController getInjectedController(T model)
+    private InjectController getInjectedController(ModelType model)
     {
         InjectController injectedController = model.getClass().getAnnotation(InjectController.class);
         if(injectedController == null)

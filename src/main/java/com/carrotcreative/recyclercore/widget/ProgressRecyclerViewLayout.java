@@ -80,7 +80,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
-    public <T> void setAdapter(RecyclerCoreAdapter<T> adapter)
+    public <ModelType> void setAdapter(RecyclerCoreAdapter<ModelType> adapter)
     {
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);
