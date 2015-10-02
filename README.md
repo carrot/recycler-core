@@ -48,30 +48,24 @@ The View is a standard Layout XML file with nothing special about it.
 
 ### The Model
 
-Next I create the model.  The model is a standard POJO that must extend `RecyclerCoreModel` which has you implement `buildController`.
+Next I create the model.  
 
-Your model must also have a public no-argument constructor.  This is the default in Java, so if you've implented no constructors you are also safe.
+The model is a standard POJO class, which is responsible for storing all of the data
+that defines our views.
 
-The Model + Controller are (justifiably) very coupled, so you'll need to build the controller before jumping into that method.
-
-I'm still going to write it here, but you'll need to jump back up after you've checked out the controller for everything to make sense.
+When defining the model, we need to declare a class level annotation `InjectController`
+and pass in the controller and the layout.
 
 `UserModel.java`:
 
 ```java
 // ...
-public class UserModel extends RecyclerCoreModel {
+@InjectController(controller = UserController.class, layout = R.layout.element_user)
+public class UserModel {
 
     public String mName;
     public String mEmail;
-
-    @Override
-    public RecyclerCoreController buildController(LayoutInflater inflater, ViewGroup parent, Activity activity)
-    {
-        View rootView = inflater.inflate(R.layout.element_user, parent, false);
-        return new UserController(rootView, activity);
-    }
-
+    
     // ... Setters + Getters
 
 }
