@@ -124,6 +124,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         mAdapter.registerAdapterDataObserver(mDataObserver);
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);
+        checkEmptyState();
     }
 
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
