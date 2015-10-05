@@ -20,9 +20,24 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 {
     private FrameLayout mContainer;
     private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
     private ProgressBar mProgressBar;
     private View mErrorStateView;
+    private View mEmptyStateView;
     private ViewVisibilityInstanceState mPrevViewVisibilityState;
+
+    /**
+     * Data observer to check for the empty states.
+     */
+    private RecyclerView.AdapterDataObserver mDataObserver = new RecyclerView.AdapterDataObserver()
+    {
+        @Override
+        public void onChanged()
+        {
+            super.onChanged();
+            checkEmptyState();
+        }
+    };
 
     public ProgressRecyclerViewLayout(Context context)
     {
@@ -51,6 +66,16 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         findViews();
         setDefaultLayoutManager();
         setDefaultAdapter();
+    }
+
+    @Override
+    protected void onDetachedFromWindow()
+    {
+        super.onDetachedFromWindow();
+        if(mAdapter != null)
+        {
+            mAdapter.unregisterAdapterDataObserver(mDataObserver);
+        }
     }
 
     private void findViews()
@@ -82,6 +107,21 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
     public void setAdapter(RecyclerCoreAdapter adapter)
     {
+        /**
+         * Need to reset the visibility, in case the adapter is set multiple times.
+         */
+        resetViewVisibility();
+
+        /**
+         * deregister the previous observer.
+         */
+        if(mAdapter != null && mAdapter != adapter)
+        {
+            mAdapter.unregisterAdapterDataObserver(mDataObserver);
+        }
+
+        mAdapter = adapter;
+        mAdapter.registerAdapterDataObserver(mDataObserver);
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);
     }
@@ -142,11 +182,15 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     }
 
     /**
+     * A methods to show/hide the error state. When #setErrorStateEnabled(true) is called
+     * after #setErrorStateEnabled(false), the view is reset to what is was before is was enabled.
      *
      * @param enable True to show the error state
      *               False to hide the error state.
      *               Throws and #IllegalStateException if the error view is not set.
      *               Set the error view using #setErrorView
+     *               Note: that the error view is set only if the empty state is not enabled.
+     *               Only one of them can be active at one time.
      */
     public void setErrorStateEnabled(boolean enable)
     {
@@ -157,12 +201,16 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
         if(enable)
         {
-            if(! isErrorStateEnabled())
+            if(! isErrorStateEnabled() && ! isEmptyStateEnabled())
             {
                 saveCurrentViewState();
                 mErrorStateView.setVisibility(VISIBLE);
                 mRecyclerView.setVisibility(GONE);
                 mProgressBar.setVisibility(GONE);
+                if(mEmptyStateView != null)
+                {
+                    mEmptyStateView.setVisibility(GONE);
+                }
             }
         }
         else
@@ -194,6 +242,126 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         }
     }
 
+    // ========================================== //
+    // =============  Empty State =============== //
+    // ========================================== //
+
+    private void checkEmptyState()
+    {
+        if(mAdapter != null)
+        {
+            if(mAdapter.getItemCount() == 0)
+            {
+                setEmptyStateEnabled(true);
+            }
+            else
+            {
+                setEmptyStateEnabled(false);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param emptyStateView The view that will be displayed when there are no items to
+     *                       display in the adapter.
+     *                       Note that either the ErrorState view or the EmptyState view
+     *                       can be shown at one time.
+     *                       If the errorState is enabled then the empty view will not be set,
+     *                       and vice versa.
+     */
+    public void setEmptyStateView(View emptyStateView)
+    {
+        if(mEmptyStateView == null)
+        {
+            mEmptyStateView = emptyStateView;
+            mContainer.addView(mEmptyStateView);
+            mEmptyStateView.setVisibility(GONE);
+        }
+
+        if(mEmptyStateView != emptyStateView)
+        {
+            mContainer.removeView(mEmptyStateView);
+            mEmptyStateView = emptyStateView;
+            mContainer.addView(mEmptyStateView);
+            mEmptyStateView.setVisibility(GONE);
+        }
+    }
+
+    /**
+     *
+     * @return True if the EmptyStateView is set and is Visible.
+     */
+    private boolean isEmptyStateEnabled()
+    {
+        if(mEmptyStateView != null && mEmptyStateView.getVisibility() == View.VISIBLE)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * A methods to show/hide the empty state. When #setEmptyStateEnabled(true) is called
+     * after #setEmptyStateEnabled(false), the view is reset to what is was before is was enabled.
+     *
+     * @param enable True to show the empty state
+     *               False to hide the empty state.
+     *               Throws and #IllegalStateException if the empty view is not set.
+     *               Set the empty view using #setEmptyStateView
+     */
+    private void setEmptyStateEnabled(boolean enable)
+    {
+        /**
+         * If the empty state view is not set, do an early return.
+         */
+        if(mEmptyStateView == null)
+        {
+            return;
+        }
+
+        if(enable)
+        {
+            if(! isEmptyStateEnabled() && ! isErrorStateEnabled())
+            {
+                saveCurrentViewState();
+                mEmptyStateView.setVisibility(VISIBLE);
+                mRecyclerView.setVisibility(GONE);
+                mProgressBar.setVisibility(GONE);
+                if(mErrorStateView != null)
+                {
+                    mErrorStateView.setVisibility(GONE);
+                }
+            }
+        }
+        else
+        {
+            resetViewVisibility();
+            mProgressBar.setVisibility(GONE);
+        }
+    }
+
+    // ============================================== //
+    // ============= Helper Functions =============== //
+    // ============================================= //
+
+    private void resetViewVisibility()
+    {
+        mPrevViewVisibilityState = null;
+        mRecyclerView.setVisibility(VISIBLE);
+        mProgressBar.setVisibility(VISIBLE);
+        if(mEmptyStateView != null)
+        {
+            mEmptyStateView.setVisibility(GONE);
+        }
+
+        if(mErrorStateView != null)
+        {
+            mErrorStateView.setVisibility(GONE);
+        }
+    }
+
     private void saveCurrentViewState()
     {
         if(mPrevViewVisibilityState == null)
@@ -203,16 +371,52 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
         mPrevViewVisibilityState.setProgressViewVisibility(mProgressBar.getVisibility());
         mPrevViewVisibilityState.setRecyclerViewVisibility(mRecyclerView.getVisibility());
-        mPrevViewVisibilityState.setErrorViewVisibility(mErrorStateView.getVisibility());
+
+        /**
+         * If error view is not set, set the visibility to gone.
+         */
+        if(mErrorStateView != null)
+        {
+            mPrevViewVisibilityState.setErrorViewVisibility(mErrorStateView.getVisibility());
+        }
+        else
+        {
+            mPrevViewVisibilityState.setErrorViewVisibility(View.GONE);
+        }
+
+        /**
+         * If empty view is not set, set the visibility to gone.
+         */
+        if(mEmptyStateView != null)
+        {
+            mPrevViewVisibilityState.setEmptyViewVisibility(mEmptyStateView.getVisibility());
+        }
+        else
+        {
+            mPrevViewVisibilityState.setEmptyViewVisibility(View.GONE);
+        }
     }
 
     private void restorePreviousViewState()
     {
         if(mPrevViewVisibilityState != null)
         {
-            mRecyclerView.setVisibility(mPrevViewVisibilityState.getRecyclerViewVisibility());
-            mProgressBar.setVisibility(mPrevViewVisibilityState.getProgressViewVisibility());
-            mErrorStateView.setVisibility(mPrevViewVisibilityState.getErrorViewVisibility());
+            setCurrentVisibilityState(mPrevViewVisibilityState);
+        }
+    }
+
+    private void setCurrentVisibilityState(ViewVisibilityInstanceState currentState)
+    {
+        mRecyclerView.setVisibility(currentState.getRecyclerViewVisibility());
+        mProgressBar.setVisibility(currentState.getProgressViewVisibility());
+        if(mEmptyStateView != null)
+        {
+            mEmptyStateView.setVisibility(currentState.getEmptyViewVisibility());
+        }
+
+        if(mErrorStateView != null)
+        {
+            mErrorStateView.setVisibility(currentState.getErrorViewVisibility());
         }
     }
 
@@ -223,13 +427,25 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     public @interface Visibility {}
 
     /**
-     * It wrap View visibility states.
+     * A Helper class that wraps the visibility of the views.
      */
     private static class ViewVisibilityInstanceState
     {
         private int mRecyclerViewVisibility;
         private int mProgressViewVisibility;
         private int mErrorViewVisibility;
+        private int mEmptyViewVisibility;
+
+        @Visibility
+        public int getEmptyViewVisibility()
+        {
+            return mEmptyViewVisibility;
+        }
+
+        public void setEmptyViewVisibility(@Visibility int emptyViewVisibility)
+        {
+            mEmptyViewVisibility = emptyViewVisibility;
+        }
 
         @Visibility
         public int getErrorViewVisibility()
