@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import com.carrotcreative.recyclercore.R;
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreModel;
 
 import java.util.ArrayList;
 
@@ -70,7 +69,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
     private void setDefaultAdapter()
     {
-        ArrayList<RecyclerCoreModel> models = new ArrayList<>();
+        ArrayList models = new ArrayList<>();
         mRecyclerView.setAdapter(new RecyclerCoreAdapter(models));
     }
 
@@ -81,7 +80,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
-    public void setAdapter(RecyclerView.Adapter adapter)
+    public void setAdapter(RecyclerCoreAdapter adapter)
     {
         mRecyclerView.setAdapter(adapter);
         mProgressBar.setVisibility(GONE);

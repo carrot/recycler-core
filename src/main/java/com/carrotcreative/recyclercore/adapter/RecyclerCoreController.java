@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public abstract class RecyclerCoreController<Model extends RecyclerCoreModel> extends RecyclerView.ViewHolder {
+public abstract class RecyclerCoreController<Model> extends RecyclerView.ViewHolder {
 
     private Context mContext;
 
