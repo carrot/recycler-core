@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'recycler-core'
+
+    publishedGroupId = 'com.carrotcreative.recyclercore'
+    libraryName = 'recycler-core'
+    artifact = 'recycler-core'
+
+    libraryDescription = 'Recycler-Core provides a clean MVC framework for managing your RecyclerView Adapters.'
+
+    siteUrl = 'https://github.com/carrot/recycler-core'
+    gitUrl = 'https://github.com/carrot/recycler-core.git'
+
+    libraryVersion = '1.0.2'
+
+    developerId = 'carrot'
+    developerName = 'carrot creative'
+    developerEmail = 'devops@carrotcreative.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.0"
@@ -22,4 +46,109 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
+}
+
+//Comment
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = publishedGroupId                               // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+
+
+//jCenter
+apply plugin: 'com.jfrog.bintray'
+
+version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    ext.recyclerViewJar = "/Users/kaushiksaurabh/Library/Android/sdk/extras/android/support/v7/recyclerview/libs/android-support-v7-recyclerview.jar"
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator)) + files(ext.recyclerViewJar)
+    classpath += files("/Users/kaushiksaurabh/Library/Android/sdk/extras/android/support/annotations/android-support-annotations.jar")
+    classpath += files("/Users/kaushiksaurabh/Library/Android/sdk/extras/android/support/v4/android-support-v4.jar")
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                //Determines whether to GPG sign the files. The default is false
+                sign = false
+                //required if sign is true
+                //passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
+    }
 }
