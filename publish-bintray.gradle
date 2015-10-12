@@ -1,0 +1,61 @@
+apply plugin: 'com.jfrog.bintray'
+
+version = libraryVersion
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    ext.recyclerViewJar = "${android.sdkDirectory}/extras/android/support/v7/recyclerview/libs/android-support-v7-recyclerview.jar"
+    ext.annotationJar = "${android.sdkDirectory}/extras/android/support/annotations/android-support-annotations.jar"
+    ext.androidSupport_V4 = "${android.sdkDirectory}/extras/android/support/v4/android-support-v4.jar"
+    classpath += files(ext.androidJar) +
+            files(ext.recyclerViewJar) +
+            files(ext.annotationJar) +
+            files(ext.androidSupport_V4)
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Bintray
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                //Determines whether to GPG sign the files. The default is false
+                sign = false
+                //required if sign is true
+                //passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+        }
+    }
+}
+

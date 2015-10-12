@@ -23,3 +23,31 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:recyclerview-v7:23.0.1'
 }
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'recycler-core'
+
+    publishedGroupId = 'com.carrotcreative.recyclercore'
+    libraryName = 'recycler-core'
+    artifact = 'recycler-core'
+
+    libraryDescription = 'Recycler-Core provides a clean MVC framework for managing your RecyclerView Adapters.'
+
+    siteUrl = 'https://github.com/carrot/recycler-core'
+    gitUrl = 'https://github.com/carrot/recycler-core.git'
+
+    libraryVersion = '1.0.2'
+
+    developerId = 'carrot'
+    developerName = 'carrot creative'
+    developerEmail = 'devops@carrotcreative.com'
+
+    licenseName = 'MIT'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
+
+apply from: 'publish-maven.gradle'
+apply from: 'publish-bintray.gradle'
+
