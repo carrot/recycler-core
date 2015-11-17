@@ -17,7 +17,7 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     /**
      * The list of #RecyclerCoreModel attached to this Adapter.
      */
-    private List<Object> mModelList;
+    private List mModelList;
 
     /**
      * Keeps a mapping between the Model class and its viewType
@@ -31,7 +31,7 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
      */
     private SparseArray<InjectController> mInjectControllerSparseArray = new SparseArray<>();
 
-    public RecyclerCoreAdapter(List<Object> modelList)
+    public RecyclerCoreAdapter(List modelList)
     {
         mModelList = modelList;
     }
