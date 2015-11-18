@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">recyclercore-example</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_error">Error State</string>
+    <string name="action_empty">Empty State</string>
+
+    <!-- Error String -->
+    <string name="error_string">Something went wrong!</string>
+    <string name="try_again">Try Again</string>
+
+    <!-- Empty string -->
+    <string name="empty_string">Nothing to display!</string>
+    <string name="load_again">Load Again</string>
+</resources>

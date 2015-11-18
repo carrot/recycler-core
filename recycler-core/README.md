@@ -8,14 +8,6 @@ Blindly dealing with multiple view types in a `RecyclerView.Adapter` can frequen
 
 Recycler-Core attempts to solve the maintainability and reusability problems that are ran into when dealing with multiple views in a `RecyclerView.Adapter` by creating an MVC pattern for RecyclerViews.
 
-Download
---------
-
-Gradle:
-```groovy
-compile 'com.carrotcreative.recyclercore:recycler-core:1.0.6'
-```
-
 ## Usage
 
 ### The View

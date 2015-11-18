@@ -1,0 +1,1 @@
+include ':recycler-core-example', ':recycler-core'
