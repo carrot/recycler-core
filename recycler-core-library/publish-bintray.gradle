@@ -10,13 +10,18 @@ task sourcesJar(type: Jar) {
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-    ext.recyclerViewJar = "${android.sdkDirectory}/extras/android/support/v7/recyclerview/libs/android-support-v7-recyclerview.jar"
-    ext.annotationJar = "${android.sdkDirectory}/extras/android/support/annotations/android-support-annotations.jar"
-    ext.androidSupport_V4 = "${android.sdkDirectory}/extras/android/support/v4/android-support-v4.jar"
+    ext.recyclerViewJar = "${android.sdkDirectory}/extras/android/m2repository/com/android/support/recyclerview-v7/23.0.0/recyclerview-v7-23.0.0-sources.jar"
+    ext.annotationJar = "${android.sdkDirectory}/extras/android/m2repository/com/android/support/support-annotations/23.0.0/support-annotations-23.0.0-sources.jar"
+    ext.androidSupport_V4 = "${android.sdkDirectory}/extras/android/m2repository/com/android/support/support-v4/23.0.0/support-v4-23.0.0-sources.jar"
     classpath += files(ext.androidJar) +
             files(ext.recyclerViewJar) +
             files(ext.annotationJar) +
             files(ext.androidSupport_V4)
+
+    assert file(ext.androidJar).exists()
+    assert file(ext.recyclerViewJar).exists()
+    assert file(ext.annotationJar).exists()
+    assert file(ext.androidSupport_V4).exists()
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

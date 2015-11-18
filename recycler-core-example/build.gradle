@@ -30,5 +30,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Recycler Core
-    compile project(':recycler-core-library')
+    compile project(':recycler-core')
 }
