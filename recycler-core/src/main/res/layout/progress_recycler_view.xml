@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <android.support.v7.widget.RecyclerView
+    <com.carrotcreative.recyclercore.widget.RecyclerCoreRecyclerView
         android:id="@+id/progress_recycler_view_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

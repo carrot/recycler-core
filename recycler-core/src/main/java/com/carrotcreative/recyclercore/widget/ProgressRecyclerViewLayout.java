@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class ProgressRecyclerViewLayout extends RelativeLayout
 {
     private FrameLayout mContainer;
-    private RecyclerView mRecyclerView;
+    private RecyclerCoreRecyclerView mCoreRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private ProgressBar mProgressBar;
     private View mErrorStateView;
@@ -81,27 +81,27 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     private void findViews()
     {
         mContainer = (FrameLayout) findViewById(R.id.progress_recycler_view_container);
-        mRecyclerView = (RecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
+        mCoreRecyclerView = (RecyclerCoreRecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
     }
 
     private void setDefaultLayoutManager()
     {
-        LinearLayoutManager manager = new LinearLayoutManager(mRecyclerView.getContext());
+        LinearLayoutManager manager = new LinearLayoutManager(mCoreRecyclerView.getContext());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(manager);
+        mCoreRecyclerView.setLayoutManager(manager);
     }
 
     private void setDefaultAdapter()
     {
         ArrayList models = new ArrayList<>();
-        mRecyclerView.setAdapter(new RecyclerCoreAdapter(models));
+        mCoreRecyclerView.setCoreAdapter(new RecyclerCoreAdapter(models));
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager)
     {
-        mRecyclerView.setLayoutManager(layoutManager);
+        mCoreRecyclerView.setLayoutManager(layoutManager);
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
@@ -122,19 +122,30 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
         mAdapter = adapter;
         mAdapter.registerAdapterDataObserver(mDataObserver);
-        mRecyclerView.setAdapter(adapter);
+        mCoreRecyclerView.setCoreAdapter(adapter);
         mProgressBar.setVisibility(GONE);
         checkEmptyState();
     }
 
+    /**
+     *
+     * @return The instance of RecyclerView. Note that you cannot use RecyclerView.setAdapter
+     * directly on this recycler view. You should use ProgressRecyclerViewLayout.setAdapter instead.
+     *
+     */
+    public RecyclerView getRecyclerView()
+    {
+        return mCoreRecyclerView;
+    }
+
     public void setOnScrollListener(RecyclerView.OnScrollListener scrollListener)
     {
-        mRecyclerView.addOnScrollListener(scrollListener);
+        mCoreRecyclerView.addOnScrollListener(scrollListener);
     }
 
     public boolean contains(RecyclerView recyclerView)
     {
-        if(mRecyclerView == recyclerView)
+        if(mCoreRecyclerView == recyclerView)
         {
             return true;
         }
@@ -144,25 +155,25 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
     public void scrollRecyclerViewBy(int dx, int dy)
     {
-        mRecyclerView.scrollBy(dy, dy);
+        mCoreRecyclerView.scrollBy(dy, dy);
     }
 
     public void scrollRecyclerViewToTop()
     {
-        mRecyclerView.getLayoutManager().scrollToPosition(0);
+        mCoreRecyclerView.getLayoutManager().scrollToPosition(0);
     }
 
     public void scrollRecyclerViewToBottom()
     {
-        if(mRecyclerView.getAdapter().getItemCount() > 0)
+        if(mCoreRecyclerView.getAdapter().getItemCount() > 0)
         {
-            mRecyclerView.getLayoutManager().scrollToPosition(mRecyclerView.getAdapter().getItemCount()-1);
+            mCoreRecyclerView.getLayoutManager().scrollToPosition(mCoreRecyclerView.getAdapter().getItemCount()-1);
         }
     }
 
     public void stopScroll()
     {
-        mRecyclerView.stopScroll();
+        mCoreRecyclerView.stopScroll();
     }
 
     // ========================================== //
@@ -206,7 +217,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
             {
                 saveCurrentViewState();
                 mErrorStateView.setVisibility(VISIBLE);
-                mRecyclerView.setVisibility(GONE);
+                mCoreRecyclerView.setVisibility(GONE);
                 mProgressBar.setVisibility(GONE);
                 if(mEmptyStateView != null)
                 {
@@ -328,7 +339,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
             {
                 saveCurrentViewState();
                 mEmptyStateView.setVisibility(VISIBLE);
-                mRecyclerView.setVisibility(GONE);
+                mCoreRecyclerView.setVisibility(GONE);
                 mProgressBar.setVisibility(GONE);
                 if(mErrorStateView != null)
                 {
@@ -350,7 +361,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     private void resetViewVisibility()
     {
         mPrevViewVisibilityState = null;
-        mRecyclerView.setVisibility(VISIBLE);
+        mCoreRecyclerView.setVisibility(VISIBLE);
         mProgressBar.setVisibility(VISIBLE);
         if(mEmptyStateView != null)
         {
@@ -371,7 +382,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         }
 
         mPrevViewVisibilityState.setProgressViewVisibility(mProgressBar.getVisibility());
-        mPrevViewVisibilityState.setRecyclerViewVisibility(mRecyclerView.getVisibility());
+        mPrevViewVisibilityState.setRecyclerViewVisibility(mCoreRecyclerView.getVisibility());
 
         /**
          * If error view is not set, set the visibility to gone.
@@ -408,7 +419,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
     private void setCurrentVisibilityState(ViewVisibilityInstanceState currentState)
     {
-        mRecyclerView.setVisibility(currentState.getRecyclerViewVisibility());
+        mCoreRecyclerView.setVisibility(currentState.getRecyclerViewVisibility());
         mProgressBar.setVisibility(currentState.getProgressViewVisibility());
         if(mEmptyStateView != null)
         {
