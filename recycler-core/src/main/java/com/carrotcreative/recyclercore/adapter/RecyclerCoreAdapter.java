@@ -136,6 +136,21 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     }
 
     /**
+     * Similar to {@link #setOnItemViewClickListener(int, OnItemClickListener)} but takes in an
+     * array of view ids
+     *
+     * @param viewIds
+     * @param onClickListener
+     */
+    public void setOnItemViewClickListener(int[] viewIds, OnItemClickListener onClickListener)
+    {
+        for(int i = 0; i < viewIds.length; i++)
+        {
+            mClickListenerSparseArray.put(viewIds[i], onClickListener);
+        }
+    }
+
+    /**
      * Note that this clickListener in {@link RecyclerCoreController#itemView} is set before the
      * {@link RecyclerCoreController#bind(Object)}
      * is called, so if you set your on click listener,
