@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
 import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
@@ -152,6 +153,28 @@ public class MainActivity extends AppCompatActivity
             mRecyclerCoreAdapter = new RecyclerCoreAdapter(mRecyclerCoreModels);
             mRecyclerViewLayout.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerViewLayout.setAdapter(mRecyclerCoreAdapter);
+            // Set the item Click listener for the recycler core
+            mRecyclerCoreAdapter.setOnItemClickListener(new RecyclerCoreAdapter
+                    .OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(View view, int position)
+                {
+                    Toast.makeText(view.getContext(), "itemView::" + position,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            mRecyclerCoreAdapter.setOnItemViewClickListener(R.id.user_image, new
+                    RecyclerCoreAdapter.OnItemClickListener()
+            {
+                @Override
+                public void onItemClick(View view, int position)
+                {
+                    Toast.makeText(view.getContext(), "imageView::" + position,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         else
         {

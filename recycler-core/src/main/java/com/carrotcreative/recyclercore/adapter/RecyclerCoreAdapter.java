@@ -31,6 +31,34 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
      */
     private SparseArray<InjectController> mInjectControllerSparseArray = new SparseArray<>();
 
+    /**
+     * Keeps a mapping for the view and its on click listener set by the adapter
+     */
+    private SparseArray<OnItemClickListener> mClickListenerSparseArray = new SparseArray<>();
+
+    /**
+     * Holds the reference to the click listener passed by the user
+     */
+    private OnItemClickListener mOnItemClickListener;
+
+    /**
+     * Interface for an item click in the recycler view
+     */
+    public interface OnItemClickListener
+    {
+        /**
+         * Callback method to be invoked when an item in this AdapterView has
+         * been clicked.
+         * <p>
+         * Implementers can call getItemAtPosition(position) if they need
+         * to access the data associated with the selected item.
+         *
+         * @param view   The view that was clicked
+         * @param position The position of the view in the adapter.
+         */
+        void onItemClick(View view, int position);
+    }
+
     public RecyclerCoreAdapter(List modelList)
     {
         mModelList = modelList;
@@ -48,6 +76,7 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
     @Override
     public void onBindViewHolder(RecyclerCoreController holder, int position)
     {
+        bindClickListeners(holder.itemView, position);
         Object model = mModelList.get(position);
         holder.bind(model);
     }
@@ -88,5 +117,98 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
         }
 
         return injectedController;
+    }
+
+    /**
+     *
+     * Note that this clickListener is set before the {@link RecyclerCoreController#bind(Object)}
+     * is called, so if you set your on click listener,
+     * you will be overwriting the clickListener and this callback will never be called.
+     *
+     * @param viewId          The view id inside the item view, for which the click listener will
+     *                        be attach. If the view id is not present for item in the view, then
+     *                        the click listener will be ignored.
+     * @param onClickListener
+     */
+    public void setOnItemViewClickListener(int viewId, OnItemClickListener onClickListener)
+    {
+        mClickListenerSparseArray.put(viewId, onClickListener);
+    }
+
+    /**
+     * Similar to {@link #setOnItemViewClickListener(int, OnItemClickListener)} but takes in an
+     * array of view ids
+     *
+     * @param viewIds
+     * @param onClickListener
+     */
+    public void setOnItemViewClickListener(int[] viewIds, OnItemClickListener onClickListener)
+    {
+        for(int i = 0; i < viewIds.length; i++)
+        {
+            mClickListenerSparseArray.put(viewIds[i], onClickListener);
+        }
+    }
+
+    /**
+     * Note that this clickListener in {@link RecyclerCoreController#itemView} is set before the
+     * {@link RecyclerCoreController#bind(Object)}
+     * is called, so if you set your on click listener,
+     * you will be overwriting the clickListener and this callback will never be called.
+     *
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener)
+    {
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    /**
+     *
+     * @param view The root view of the recycler view holder
+     * @param pos The position in the recycler view items
+     */
+    private void bindClickListeners(View view, final int pos)
+    {
+        bindOnItemClickListener(view, pos);
+        //Search and find the click listeners for the viewId's passed by the user
+        for(int i = 0; i< mClickListenerSparseArray.size(); i++)
+        {
+            final int key = mClickListenerSparseArray.keyAt(i);
+            final View foundView = view.findViewById(key);
+            if(foundView != null)
+            {
+                foundView.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        mClickListenerSparseArray.get(key).onItemClick(foundView, pos);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * The different between this and {@link #bindClickListeners(View, int)} is that this function
+     * only binds the listener to the {@link RecyclerCoreController#itemView}
+     *
+     * @param view The root view of the recycler view holder
+     * @param pos  The position in the recycler view items
+     */
+    private void bindOnItemClickListener(final View view, final int pos)
+    {
+        view.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if(mOnItemClickListener != null)
+                {
+                    mOnItemClickListener.onItemClick(view, pos);
+                }
+            }
+        });
     }
 }
