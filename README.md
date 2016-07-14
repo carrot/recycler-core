@@ -13,7 +13,7 @@ Download
 
 Gradle:
 ```groovy
-compile 'com.carrotcreative.recyclercore:recycler-core:1.0.6'
+compile 'com.carrotcreative.recyclercore:recycler-core:1.0.7'
 ```
 
 ## Usage

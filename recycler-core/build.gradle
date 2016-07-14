@@ -37,7 +37,7 @@ ext {
     siteUrl = 'https://github.com/carrot/recycler-core'
     gitUrl = 'https://github.com/carrot/recycler-core.git'
 
-    libraryVersion = '1.0.6'
+    libraryVersion = '1.0.7'
 
     developerId = 'carrot'
     developerName = 'carrot creative'
