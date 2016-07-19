@@ -56,7 +56,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         // Inflating the View
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.progress_recycler_view, this, true);
+        inflater.inflate(R.layout.rv_core_progress_recycler_view, this, true);
 
         // prepare the views
         findViews();
@@ -76,9 +76,9 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
 
     private void findViews()
     {
-        mContainer = (FrameLayout) findViewById(R.id.progress_recycler_view_container);
-        mCoreRecyclerView = (RecyclerCoreRecyclerView) findViewById(R.id.progress_recycler_view_recycler_view);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_recycler_view_progress_bar);
+        mContainer = (FrameLayout) findViewById(R.id.rv_core_progress_recycler_view_container);
+        mCoreRecyclerView = (RecyclerCoreRecyclerView) findViewById(R.id.rv_core_progress_recycler_view_recycler_view);
+        mProgressBar = (ProgressBar) findViewById(R.id.rv_core_progress_recycler_view_progress_bar);
     }
 
     private void setDefaultLayoutManager()
