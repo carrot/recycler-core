@@ -57,12 +57,8 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.progress_recycler_view, this, true);
-    }
 
-    @Override
-    protected void onFinishInflate()
-    {
-        super.onFinishInflate();
+        // prepare the views
         findViews();
         setDefaultLayoutManager();
         setDefaultAdapter();
