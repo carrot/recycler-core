@@ -13,8 +13,8 @@ final class UnlimitedScrollHelper
 {
     private static final String TAG = UnlimitedScrollHelper.class.getSimpleName();
 
-    static final int INVALID_DISTANCE_FROM_BOTTOM_TO_REFRESH = - 1;
-    private int mDistanceFromBottomToRefresh = INVALID_DISTANCE_FROM_BOTTOM_TO_REFRESH;
+    static final int INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE = - 1;
+    private int mDistanceFromBottomToRefresh = INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE;
     private int mLastVisibleItemPosition;
     private ProgressRecyclerViewLayout.OnLoadPointListener mLoadPointListener = new
             ProgressRecyclerViewLayout.OnLoadPointListener()
@@ -40,7 +40,7 @@ final class UnlimitedScrollHelper
     void onScrolled(RecyclerView.LayoutManager layoutManager, int totalItemCount)
     {
         // If the distance is invalid, do nothing, return
-        if(mDistanceFromBottomToRefresh <= INVALID_DISTANCE_FROM_BOTTOM_TO_REFRESH)
+        if(mDistanceFromBottomToRefresh <= INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE)
         {
             return;
         }

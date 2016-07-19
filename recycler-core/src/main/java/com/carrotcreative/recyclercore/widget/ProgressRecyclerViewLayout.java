@@ -32,7 +32,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     /**
      * An interface to add a callback that gets called when the load point is reached.
      * For the load point callback to work, we need to set
-     * {@link #setDistanceFromBottomToRefresh(int)} and the
+     * {@link #setDistanceFromBottomToLoadMore(int)} and the
      * {@link #setOnLoadPointListener(OnLoadPointListener)}
      * <p>
      * This currently only supports {@link android.support.v7.widget.LinearLayoutManager},
@@ -91,8 +91,8 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
             TypedArray customAttr = getContext().obtainStyledAttributes(attrs, R.styleable
                     .ProgressRecyclerViewLayout);
             int distanceFromButtonToRefresh = customAttr.getInt(
-                    R.styleable.ProgressRecyclerViewLayout_distanceFromBottomToRefresh,
-                    UnlimitedScrollHelper.INVALID_DISTANCE_FROM_BOTTOM_TO_REFRESH);
+                    R.styleable.ProgressRecyclerViewLayout_distanceFromBottomToLoadMore,
+                    UnlimitedScrollHelper.INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE);
             mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromButtonToRefresh);
         }
     }
@@ -156,14 +156,14 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
      * @param distanceFromBottomToRefresh The no of item from the bottom of the recycler view,
      *                                    after which #OnLoadPointListener is called
      */
-    public void setDistanceFromBottomToRefresh(int distanceFromBottomToRefresh)
+    public void setDistanceFromBottomToLoadMore(int distanceFromBottomToRefresh)
     {
         mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromBottomToRefresh);
     }
 
     /**
      * Set the listener that will be called once the load point is reached.
-     * This will not work if {@link #setDistanceFromBottomToRefresh(int)} is not set.
+     * This will not work if {@link #setDistanceFromBottomToLoadMore(int)} is not set.
      *
      * @param loadPointListener
      */
