@@ -90,10 +90,10 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         {
             TypedArray customAttr = getContext().obtainStyledAttributes(attrs, R.styleable
                     .ProgressRecyclerViewLayout);
-            int distanceFromButtonToRefresh = customAttr.getInt(
+            int distanceFromBottomToRefresh = customAttr.getInt(
                     R.styleable.ProgressRecyclerViewLayout_distanceFromBottomToLoadMore,
                     UnlimitedScrollHelper.INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE);
-            mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromButtonToRefresh);
+            mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromBottomToRefresh);
         }
     }
 
@@ -148,7 +148,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
      * A value of 0, means the #onReachedLoadPoint is called when the last child starts becoming
      * visible.
      * <p>
-     * A value of 1 means the #onReachedLoadPoint is called when the secnd last child starts
+     * A value of 1 means the #onReachedLoadPoint is called when the second last child starts
      * becoming visible
      * <p>
      * A Negative value is considered and invalid value

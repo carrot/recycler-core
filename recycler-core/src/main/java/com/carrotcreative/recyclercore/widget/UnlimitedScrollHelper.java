@@ -85,9 +85,9 @@ final class UnlimitedScrollHelper
     private static int getMax(int[] arr)
     {
         int max = arr[0];
-        for(int i = 0; i < arr.length - 1; i++)
+        for(int i = 1; i < arr.length; i++)
         {
-            max = Math.max(arr[i], arr[i + 1]);
+            max = Math.max(max, arr[i]);
         }
         return max;
     }
@@ -95,7 +95,7 @@ final class UnlimitedScrollHelper
     /**
      *
      * @param totalCount Total count of items.
-     * @param spanCount
+     * @param spanCount The {@link StaggeredGridLayoutManager#getSpanCount()} value
      * @return
      */
     private static int getMaxRows(int totalCount, int spanCount)
