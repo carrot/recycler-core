@@ -1,7 +1,9 @@
 package com.carrotcreative.recyclercore.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -25,6 +27,22 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     private View mErrorStateView;
     private View mEmptyStateView;
     private ViewVisibilityInstanceState mPrevViewVisibilityState;
+    private UnlimitedScrollHelper mUnlimitedScrollHelper = new UnlimitedScrollHelper();
+
+    /**
+     * An interface to add a callback that gets called when the load point is reached.
+     * For the load point callback to work, we need to set
+     * {@link #setDistanceFromBottomToLoadMore(int)} and the
+     * {@link #setOnLoadPointListener(OnLoadPointListener)}
+     * <p>
+     * This currently only supports {@link android.support.v7.widget.LinearLayoutManager},
+     * {@link android.support.v7.widget.StaggeredGridLayoutManager},
+     * {@link android.support.v7.widget.GridLayoutManager}
+     */
+    public interface OnLoadPointListener
+    {
+        void onReachedLoadPoint();
+    }
 
     /**
      * Data observer to check for the empty states.
@@ -52,6 +70,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     public ProgressRecyclerViewLayout(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
+        initAttributes(attrs);
 
         // Inflating the View
         LayoutInflater inflater = (LayoutInflater) context
@@ -62,6 +81,20 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
         findViews();
         setDefaultLayoutManager();
         setDefaultAdapter();
+        setScrollListener();
+    }
+
+    private void initAttributes(AttributeSet attrs)
+    {
+        if(attrs != null)
+        {
+            TypedArray customAttr = getContext().obtainStyledAttributes(attrs, R.styleable
+                    .ProgressRecyclerViewLayout);
+            int distanceFromBottomToRefresh = customAttr.getInt(
+                    R.styleable.ProgressRecyclerViewLayout_distanceFromBottomToLoadMore,
+                    UnlimitedScrollHelper.INVALID_DISTANCE_FROM_BOTTOM_TO_LOAD_MORE);
+            mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromBottomToRefresh);
+        }
     }
 
     @Override
@@ -92,6 +125,51 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     {
         ArrayList models = new ArrayList<>();
         mCoreRecyclerView.setCoreAdapter(new RecyclerCoreAdapter(models));
+    }
+
+    private void setScrollListener()
+    {
+        mCoreRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+                mUnlimitedScrollHelper.onScrolled(recyclerView.getLayoutManager(),
+                        mAdapter.getItemCount());
+            }
+        });
+    }
+
+    /**
+     * Helper method to set the distance from bottom value programmatically, if its not set in
+     * the layout file.
+     * <p>
+     * A value of 0, means the #onReachedLoadPoint is called when the last child starts becoming
+     * visible.
+     * <p>
+     * A value of 1 means the #onReachedLoadPoint is called when the second last child starts
+     * becoming visible
+     * <p>
+     * A Negative value is considered and invalid value
+     *
+     * @param distanceFromBottomToRefresh The no of item from the bottom of the recycler view,
+     *                                    after which #OnLoadPointListener is called
+     */
+    public void setDistanceFromBottomToLoadMore(int distanceFromBottomToRefresh)
+    {
+        mUnlimitedScrollHelper.setDistanceFromBottomToRefresh(distanceFromBottomToRefresh);
+    }
+
+    /**
+     * Set the listener that will be called once the load point is reached.
+     * This will not work if {@link #setDistanceFromBottomToLoadMore(int)} is not set.
+     *
+     * @param loadPointListener
+     */
+    public void setOnLoadPointListener(@NonNull OnLoadPointListener loadPointListener)
+    {
+        mUnlimitedScrollHelper.setLoadPointListener(loadPointListener);
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setLayoutManager} */

@@ -142,11 +142,81 @@ And now you have:
 
 ## Extras
 
-### ProgressRecyclerView
+### ProgressRecyclerViewLayout
 
-RecyclerCore also provides a custom view called `ProgressRecyclerView`.  This is just a `RecyclerView` with a `ProgressBar` inside of a `RelativeLayout` and it manages displaying the `ProgressBar` when the adapter is set.
+RecyclerCore also provides a custom view called `ProgressRecyclerViewLayout`.  This is just a `RecyclerView` with a `ProgressBar` inside of a `RelativeLayout` and it manages displaying the `ProgressBar` when the adapter is set.
 
 I pretty much never use RecyclerViews that aren't encapsulated inside this pattern so I decided to include it in this library.
+
+### SwipeRefreshProgressRecyclerView
+
+We also have a `SwipeRefreshProgressRecyclerView` that is same as `SwipeRefreshLayout` with `ProgressRecyclerViewLayout` as a child. So it encapsulates the features or `SwipeRefreshLayout`, `RecyclerView` in one View.
+
+### OnLoadPointListener
+
+`ProgressRecyclerViewLayout` also provides us interfaces that can allow us to add unlimited scroll.
+
+```
+    /**
+     * An interface to add a callback that gets called when the load point is reached.
+     * For the load point callback to work, we need to set
+     * {@link #setDistanceFromBottomToLoadMore(int)} and the
+     * {@link #setOnLoadPointListener(OnLoadPointListener)}
+     * <p>
+     * This currently only supports {@link android.support.v7.widget.LinearLayoutManager},
+     * {@link android.support.v7.widget.StaggeredGridLayoutManager},
+     * {@link android.support.v7.widget.GridLayoutManager}
+     */
+    public interface OnLoadPointListener
+    {
+        void onReachedLoadPoint();
+    }
+```
+
+In order to get that working, we need to set `distanceFromBottomToLoadMore` attribute value, which can be set either in the Layout or programmatically.
+
+```
+<com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recycler_view_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:distanceFromBottomToLoadMore="0"
+    />
+```
+OR
+```
+    /**
+     * Helper method to set the distance from bottom value programmatically, if its not set in
+     * the layout file.
+     * <p>
+     * A value of 0, means the #onReachedLoadPoint is called when the last child starts becoming
+     * visible.
+     * <p>
+     * A value of 1 means the #onReachedLoadPoint is called when the secnd last child starts
+     * becoming visible
+     * <p>
+     * A Negative value is considered and invalid value
+     *
+     * @param distanceFromBottomToLoadMore The no of item from the bottom of the recycler view,
+     *                                    after which #OnLoadPointListener is called
+     */
+    public void setDistanceFromBottomToLoadMore(int distanceFromBottomToLoadMore)
+```
+
+Once this is done, we need to set a listener that will be called when the recycler view reached the load point
+```
+        mRecyclerViewLayout.setOnLoadPointListener(new ProgressRecyclerViewLayout
+                .OnLoadPointListener()
+        {
+            @Override
+            public void onReachedLoadPoint()
+            {
+                loadMoreData();
+            }
+        });
+```
 
 ## License
 

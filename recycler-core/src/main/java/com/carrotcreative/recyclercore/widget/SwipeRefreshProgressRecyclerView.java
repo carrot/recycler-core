@@ -14,8 +14,7 @@ public class SwipeRefreshProgressRecyclerView extends SwipeRefreshLayout
 
     public SwipeRefreshProgressRecyclerView(Context context)
     {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public SwipeRefreshProgressRecyclerView(Context context, AttributeSet attrs)

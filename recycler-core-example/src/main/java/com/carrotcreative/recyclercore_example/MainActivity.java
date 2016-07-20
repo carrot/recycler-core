@@ -3,6 +3,7 @@ package com.carrotcreative.recyclercore_example;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,6 +68,16 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 loadData();
+            }
+        });
+
+        mRecyclerViewLayout.setOnLoadPointListener(new ProgressRecyclerViewLayout
+                .OnLoadPointListener()
+        {
+            @Override
+            public void onReachedLoadPoint()
+            {
+                Toast.makeText(getApplicationContext(), "Load point reached!", Toast.LENGTH_SHORT).show();
             }
         });
     }
