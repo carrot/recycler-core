@@ -211,4 +211,18 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
             }
         });
     }
+
+    /**
+     * A helper function to return the item at the given position in the adapter
+     * {@link OnItemClickListener#onItemClick(View, int)} should be sufficient as they return the
+     * position of the item clicked, but in case when reference to the models is not preserved,
+     * this function can be used to get the model at a specified position
+     *
+     * @param position The position from which the model is required.
+     * @return The object set in the @mModelList at the given position.
+     */
+    public Object getItemAtPosition(int position)
+    {
+        return mModelList.get(position);
+    }
 }
