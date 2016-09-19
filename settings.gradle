@@ -1,1 +1,1 @@
-include ':recycler-core-example', ':recycler-core'
+include ':recycler-core-example', ':recycler-core', ':recyclercore-compiler'
