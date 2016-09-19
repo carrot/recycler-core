@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.carrotcreative.recyclercore.R;
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreBaseAdapter;
 
 import java.util.ArrayList;
 
@@ -124,7 +124,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     private void setDefaultAdapter()
     {
         ArrayList models = new ArrayList<>();
-        mCoreRecyclerView.setCoreAdapter(new RecyclerCoreAdapter(models));
+        mCoreRecyclerView.setCoreAdapter(new RecyclerCoreBaseAdapter(models));
     }
 
     private void setScrollListener()
@@ -179,7 +179,7 @@ public class ProgressRecyclerViewLayout extends RelativeLayout
     }
 
     /** Wrapper for {@link android.support.v7.widget.RecyclerView#setAdapter} */
-    public void setAdapter(RecyclerCoreAdapter adapter)
+    public void setAdapter(RecyclerCoreBaseAdapter adapter)
     {
         /**
          * Need to reset the visibility, in case the adapter is set multiple times.

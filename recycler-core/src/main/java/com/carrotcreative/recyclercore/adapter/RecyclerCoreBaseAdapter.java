@@ -12,7 +12,7 @@ import com.carrotcreative.recyclercore.util.InstantiationUtil;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreController>
+public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreController>
 {
     /**
      * The list of #RecyclerCoreModel attached to this Adapter.
@@ -59,7 +59,7 @@ public class RecyclerCoreAdapter extends RecyclerView.Adapter<RecyclerCoreContro
         void onItemClick(View view, int position);
     }
 
-    public RecyclerCoreAdapter(List modelList)
+    public RecyclerCoreBaseAdapter(List modelList)
     {
         mModelList = modelList;
     }
