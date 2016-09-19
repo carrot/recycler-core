@@ -3,7 +3,6 @@ package com.carrotcreative.recyclercore_example;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.adapter.RecyclerCoreBaseAdapter;
 import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
 import com.carrotcreative.recyclercore_example.net.github.Github;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
@@ -27,7 +26,7 @@ import retrofit.client.Response;
 public class MainActivity extends AppCompatActivity
 {
     private ProgressRecyclerViewLayout mRecyclerViewLayout;
-    private RecyclerCoreAdapter mRecyclerCoreAdapter;
+    private RecyclerCoreBaseAdapter mRecyclerCoreAdapter;
     private ArrayList<Object> mRecyclerCoreModels = new ArrayList<>();
     private Button mTryAgainButton;
     private Button mLoadAgain;
@@ -161,11 +160,11 @@ public class MainActivity extends AppCompatActivity
 
         if(mRecyclerCoreAdapter == null)
         {
-            mRecyclerCoreAdapter = new RecyclerCoreAdapter(mRecyclerCoreModels);
+            mRecyclerCoreAdapter = new RecyclerCoreBaseAdapter(mRecyclerCoreModels);
             mRecyclerViewLayout.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerViewLayout.setAdapter(mRecyclerCoreAdapter);
             // Set the item Click listener for the recycler core
-            mRecyclerCoreAdapter.setOnItemClickListener(new RecyclerCoreAdapter
+            mRecyclerCoreAdapter.setOnItemClickListener(new RecyclerCoreBaseAdapter
                     .OnItemClickListener()
             {
                 @Override
@@ -177,7 +176,7 @@ public class MainActivity extends AppCompatActivity
             });
 
             mRecyclerCoreAdapter.setOnItemViewClickListener(R.id.user_image, new
-                    RecyclerCoreAdapter.OnItemClickListener()
+                    RecyclerCoreBaseAdapter.OnItemClickListener()
             {
                 @Override
                 public void onItemClick(View view, int position)

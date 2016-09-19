@@ -5,4 +5,5 @@ dependencies {
     compile deps.autoservice
     compile deps.autocommon
     compile deps.javapoet
+    compile project(':recyclercore-annotations')
 }
