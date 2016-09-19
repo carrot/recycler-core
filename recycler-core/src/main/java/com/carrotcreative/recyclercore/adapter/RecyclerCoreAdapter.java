@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.carrotcreative.recyclercore.inject.InjectController;
+import com.carrotcreative.recyclercore.annotations.InjectController;
 import com.carrotcreative.recyclercore.util.InstantiationUtil;
 
 import java.util.HashMap;
