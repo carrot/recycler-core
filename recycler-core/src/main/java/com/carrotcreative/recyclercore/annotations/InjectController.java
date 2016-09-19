@@ -1,4 +1,4 @@
-package com.carrotcreative.recyclercore.inject;
+package com.carrotcreative.recyclercore.annotations;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
 
@@ -8,12 +8,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by kaushiksaurabh on 9/19/16.
+ * Created by kaushiksaurabh on 10/1/15.
  */
-
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface RCModel
+public @interface InjectController
 {
     Class<? extends RecyclerCoreController> controller();
+
+    int layout();
 }

@@ -3,7 +3,6 @@ package com.carrotcreative.recyclercore.util;
 import android.view.View;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
-import com.carrotcreative.recyclercore.inject.InjectController;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
