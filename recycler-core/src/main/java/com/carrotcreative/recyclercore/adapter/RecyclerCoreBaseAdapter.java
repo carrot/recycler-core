@@ -12,7 +12,7 @@ import com.carrotcreative.recyclercore.util.InstantiationUtil;
 import java.util.HashMap;
 import java.util.List;
 
-public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreController>
+public abstract class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreController>
 {
     /**
      * The list of #RecyclerCoreModel attached to this Adapter.
@@ -22,14 +22,14 @@ public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreCo
     /**
      * Keeps a mapping between the Model class and its viewType
      */
-    private HashMap<Class<?>, Integer> mModelViewTypeMap = new HashMap<>();
+    protected HashMap<Class<?>, Integer> mModelViewTypeMap = new HashMap<>();
 
     /**
      * Keeps a mapping between the viewType and its corresponding #InjectController
      * A parse array for fast lookup, used in #onBindViewHolder to get the InjectController
      * from the viewType.
      */
-    private SparseArray<InjectController> mInjectControllerSparseArray = new SparseArray<>();
+    protected SparseArray<Class<? extends RecyclerCoreController>> mControllerSparseArray = new SparseArray<>();
 
     /**
      * Keeps a mapping for the view and its on click listener set by the adapter
@@ -67,10 +67,7 @@ public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreCo
     @Override
     public RecyclerCoreController onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        InjectController injectController = mInjectControllerSparseArray.get(viewType);
-        View view = LayoutInflater.from(parent.getContext()).inflate(injectController.layout(),
-                parent, false);
-        return InstantiationUtil.instantiateController(injectController.controller(), view );
+        return newInstanceController(mControllerSparseArray.get(viewType), parent);
     }
 
     @Override
@@ -91,32 +88,7 @@ public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreCo
     public int getItemViewType(int position)
     {
         Object model = mModelList.get(position);
-        return getViewType(model);
-    }
-
-    private int getViewType(Object model)
-    {
-        Integer viewType = mModelViewTypeMap.get(model.getClass());
-        if(viewType == null)
-        {
-            viewType = mInjectControllerSparseArray.size() + 1;
-            InjectController injectController = getInjectedController(model);
-            mInjectControllerSparseArray.put(viewType, injectController);
-            mModelViewTypeMap.put(model.getClass(), viewType);
-        }
-        return viewType;
-    }
-
-    private InjectController getInjectedController(Object model)
-    {
-        InjectController injectedController = model.getClass().getAnnotation(InjectController.class);
-        if(injectedController == null)
-        {
-            throw new IllegalStateException(" class " + model.getClass().getCanonicalName() + " " +
-                    " does not implement InjectController annotation");
-        }
-
-        return injectedController;
+        return mModelViewTypeMap.get(model.getClass());
     }
 
     /**
@@ -225,4 +197,12 @@ public class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<RecyclerCoreCo
     {
         return mModelList.get(position);
     }
+
+    /**
+     *
+     * @param clazz The class for the controller class.
+     * @param parent The parent of the view
+     * @return
+     */
+    protected abstract RecyclerCoreController newInstanceController(Class<?> clazz, ViewGroup parent);
 }
