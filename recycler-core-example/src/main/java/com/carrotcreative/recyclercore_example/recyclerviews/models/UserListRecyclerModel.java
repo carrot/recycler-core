@@ -1,6 +1,6 @@
 package com.carrotcreative.recyclercore_example.recyclerviews.models;
 
-import com.carrotcreative.recyclercore.annotations.InjectController;
+import com.carrotcreative.recyclercore.inject.InjectController;
 import com.carrotcreative.recyclercore_example.R;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
 import com.carrotcreative.recyclercore_example.recyclerviews.controllers.UserListRecyclerController;

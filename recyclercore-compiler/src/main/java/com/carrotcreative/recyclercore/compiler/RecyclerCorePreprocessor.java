@@ -4,7 +4,9 @@ import com.carrotcreative.recyclercore.annotations.RCController;
 import com.carrotcreative.recyclercore.annotations.RCModel;
 import com.google.auto.service.AutoService;
 
+import java.io.IOException;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -25,13 +27,13 @@ public class RecyclerCorePreprocessor extends AbstractProcessor
     private PreProcessorHelper mPreProcessorHelper;
 
     @Override
-    public synchronized void init(ProcessingEnvironment processingEnvironment)
+    public synchronized void init(ProcessingEnvironment env)
     {
-        super.init(processingEnvironment);
-        mElements = processingEnvironment.getElementUtils();
-        mTypes = processingEnvironment.getTypeUtils();
-        mFiler = processingEnvironment.getFiler();
-        mPreProcessorHelper = new PreProcessorHelper(mElements, mTypes, mFiler);
+        super.init(env);
+        mElements = env.getElementUtils();
+        mTypes = env.getTypeUtils();
+        mFiler = env.getFiler();
+        mPreProcessorHelper = new PreProcessorHelper(mElements, mTypes, mFiler, env);
     }
 
     @Override
@@ -44,8 +46,22 @@ public class RecyclerCorePreprocessor extends AbstractProcessor
     }
 
     @Override
-    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment)
+    public boolean process(Set<? extends TypeElement> set, RoundEnvironment env)
     {
-        return false;
+        Set<ModelDetails> models = mPreProcessorHelper.findRCModels(env);
+        Set<ControllerDetails> controllers = mPreProcessorHelper.findControllers(env);
+        Map<ModelDetails, ControllerDetails> map = mPreProcessorHelper.createModelControllerMap(models, controllers);
+        try
+        {
+            if(!map.isEmpty())
+            {
+                AdapterGenHelper.brewAdapter(map).writeTo(mFiler);
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return true;
     }
 }
