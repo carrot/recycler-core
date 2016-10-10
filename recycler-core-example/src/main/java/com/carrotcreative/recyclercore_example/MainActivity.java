@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.RecyclerCoreAdapter;
 import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
 import com.carrotcreative.recyclercore_example.net.github.Github;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
