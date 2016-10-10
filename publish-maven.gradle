@@ -2,15 +2,15 @@ apply plugin: 'com.github.dcendents.android-maven'
 //This does not publish to maven, but creates the pom file required for jCenter to publish it.
 
 group = publishedGroupId // Maven Group ID for the artifact
-
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom {
             project {
-                packaging 'aar'
+                packaging libPackaging
                 groupId publishedGroupId
                 artifactId artifact
+                version libraryVersion
 
                 // Add your description here
                 name libraryName

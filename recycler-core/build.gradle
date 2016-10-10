@@ -24,29 +24,30 @@ dependencies {
 }
 
 ext {
-    bintrayRepo = 'maven'
+    bintrayRepo = rootProject.ext.bintrayRepo
     bintrayName = 'recycler-core'
 
-    publishedGroupId = 'com.carrotcreative.recyclercore'
+    publishedGroupId = rootProject.ext.publishedGroupId
     libraryName = 'recycler-core'
-    artifact = 'recycler-core'
+    artifact = libraryName
 
     libraryDescription = 'Recycler-Core provides a clean MVC framework for managing your RecyclerView Adapters.'
 
-    siteUrl = 'https://github.com/carrot/recycler-core'
-    gitUrl = 'https://github.com/carrot/recycler-core.git'
+    siteUrl = rootProject.ext.siteUrl
+    gitUrl = rootProject.ext.gitUrl
 
-    libraryVersion = '1.0.7'
+    libPackaging = 'aar'
+    libraryVersion = rootProject.ext.libraryVersion
 
-    developerId = 'carrot'
-    developerName = 'carrot creative'
-    developerEmail = 'devops@carrotcreative.com'
+    developerId = rootProject.ext.developerId
+    developerName = rootProject.ext.developerName
+    developerEmail = rootProject.ext.developerEmail
 
-    licenseName = 'MIT'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
+    licenseName = rootProject.ext.licenseName
+    licenseUrl = rootProject.ext.licenseUrl
+    allLicenses = rootProject.ext.allLicenses
 }
 
-apply from: 'publish-maven.gradle'
-apply from: 'publish-bintray.gradle'
+apply from: rootProject.file('publish-maven.gradle')
+apply from: rootProject.file('publish-bintray.gradle')
 

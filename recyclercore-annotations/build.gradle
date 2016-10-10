@@ -6,3 +6,31 @@ targetCompatibility = rootProject.ext.targetCompatibilityVersion
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+
+ext {
+    bintrayRepo = rootProject.ext.bintrayRepo
+    bintrayName = 'recyclercore-annotations'
+
+    publishedGroupId = rootProject.ext.publishedGroupId
+    libraryName = 'recyclercore-annotations'
+    artifact = libraryName
+
+    libraryDescription = 'Recycler-Core provides a clean MVC framework for managing your RecyclerView Adapters.'
+
+    siteUrl = rootProject.ext.siteUrl
+    gitUrl = rootProject.ext.gitUrl
+
+    libPackaging = 'jar'
+    libraryVersion = rootProject.ext.libraryVersion
+
+    developerId = rootProject.ext.developerId
+    developerName = rootProject.ext.developerName
+    developerEmail = rootProject.ext.developerEmail
+
+    licenseName = rootProject.ext.licenseName
+    licenseUrl = rootProject.ext.licenseUrl
+    allLicenses = rootProject.ext.allLicenses
+}
+
+apply from: rootProject.file('publish-maven.gradle')
+apply from: rootProject.file('publish-bintray.gradle')

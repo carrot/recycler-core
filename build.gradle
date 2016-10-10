@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
@@ -28,6 +28,18 @@ ext {
     buildToolsVersion = '24.0.2'
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
+    // For release
+    bintrayRepo = 'maven'
+    publishedGroupId = 'com.carrotcreative.recyclercore'
+    siteUrl = 'https://github.com/carrot/recycler-core'
+    gitUrl = 'https://github.com/carrot/recycler-core.git'
+    libraryVersion = '2.0-alpha'
+    developerId = 'carrot'
+    developerName = 'carrot creative'
+    developerEmail = 'devops@carrotcreative.com'
+    licenseName = 'MIT'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
 }
 
 ext.deps = [
