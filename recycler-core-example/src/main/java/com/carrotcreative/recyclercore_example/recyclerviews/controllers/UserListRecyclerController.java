@@ -5,11 +5,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.carrotcreative.recyclercore.adapter.RecyclerCoreController;
+import com.carrotcreative.recyclercore.annotations.RCController;
 import com.carrotcreative.recyclercore_example.R;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
 import com.carrotcreative.recyclercore_example.recyclerviews.models.UserListRecyclerModel;
 import com.squareup.picasso.Picasso;
 
+@RCController(layout = R.layout.element_user_list)
 public class UserListRecyclerController extends RecyclerCoreController<UserListRecyclerModel>
 {
     private ImageView mUserImage;
