@@ -84,7 +84,12 @@ public abstract class RecyclerCoreBaseAdapter extends RecyclerView.Adapter<Recyc
     public int getItemViewType(int position)
     {
         Object model = mModelList.get(position);
-        return mModelViewTypeMap.get(model.getClass());
+        Integer viewType = mModelViewTypeMap.get(model.getClass());
+        if(viewType == null)
+        {
+            throw new IllegalStateException("Unregistered model:" + model.getClass());
+        }
+        return viewType;
     }
 
     /**
