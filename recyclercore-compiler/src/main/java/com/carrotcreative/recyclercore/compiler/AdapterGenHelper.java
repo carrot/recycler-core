@@ -49,7 +49,7 @@ class AdapterGenHelper
                 .addStatement("$T view = null", VIEW);
         {
             String statement = "view = $T.from(parent.getContext()).inflate($L, parent, false)";
-            newInstanceControllerMethod.beginControlFlow("switch(clazz.getCanonicalName()t)");
+            newInstanceControllerMethod.beginControlFlow("switch(clazz.getCanonicalName())");
             for(ControllerDetails controller : map.values())
             {
                 ClassName returnCls = ClassName.get(controller.getPackageName(), controller.getClassName());
