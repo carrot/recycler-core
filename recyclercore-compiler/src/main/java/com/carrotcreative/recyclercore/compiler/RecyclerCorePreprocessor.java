@@ -50,15 +50,16 @@ public class RecyclerCorePreprocessor extends AbstractProcessor
     {
         Set<ModelDetails> models = mPreProcessorHelper.findRCModels(env);
         Set<ControllerDetails> controllers = mPreProcessorHelper.findControllers(env);
-        Map<ModelDetails, ControllerDetails> map = mPreProcessorHelper.createModelControllerMap(models, controllers);
+        Map<ModelDetails, ControllerDetails> map = mPreProcessorHelper.createModelControllerMap
+                (models, controllers);
         try
         {
-            if(!map.isEmpty())
+            if(! map.isEmpty())
             {
                 AdapterGenHelper.brewAdapter(map).writeTo(mFiler);
             }
         }
-        catch (IOException e)
+        catch(IOException e)
         {
             e.printStackTrace();
         }

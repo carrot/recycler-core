@@ -9,7 +9,8 @@ import javax.lang.model.util.Elements;
 
 class ClassUtil
 {
-    static String getClassName(TypeElement type, String packageName) {
+    static String getClassName(TypeElement type, String packageName)
+    {
         int packageLen = packageName.length() + 1;
         return type.getQualifiedName().toString().substring(packageLen).replace('.', '$');
     }
