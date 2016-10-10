@@ -69,7 +69,10 @@ class PreProcessorHelper
         for(ModelDetails model : models)
         {
             ControllerDetails controller = findController(controllers, model);
-            map.put(model, controller);
+            if(controller != null)
+            {
+                map.put(model, controller);
+            }
         }
         return map;
     }
