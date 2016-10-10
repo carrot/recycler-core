@@ -42,7 +42,8 @@ class PreProcessorHelper
         Set<ModelDetails> classSet = new LinkedHashSet<>();
         for(Element element : env.getElementsAnnotatedWith(RCModel.class))
         {
-            ModelDetails clsDetails = ModelDetails.fromTypeElement((TypeElement) element, mElements, mTypes);
+            ModelDetails clsDetails = ModelDetails.fromTypeElement((TypeElement) element,
+                    mElements, mTypes);
             classSet.add(clsDetails);
         }
         return classSet;
@@ -53,13 +54,16 @@ class PreProcessorHelper
         Set<ControllerDetails> extendedController = new LinkedHashSet<>();
         for(Element element : env.getElementsAnnotatedWith(RCController.class))
         {
-            ControllerDetails classDetails = ControllerDetails.fromTypeElement((TypeElement) element, mElements);
+            ControllerDetails classDetails = ControllerDetails.fromTypeElement((TypeElement)
+                    element, mElements);
             extendedController.add(classDetails);
         }
         return extendedController;
     }
 
-    Map<ModelDetails, ControllerDetails> createModelControllerMap(Set<ModelDetails> models, Set<ControllerDetails> controllers)
+    Map<ModelDetails, ControllerDetails> createModelControllerMap(Set<ModelDetails> models,
+                                                                  Set<ControllerDetails>
+                                                                          controllers)
     {
         Map<ModelDetails, ControllerDetails> map = new LinkedHashMap<>();
         for(ModelDetails model : models)
@@ -75,7 +79,8 @@ class PreProcessorHelper
         for(ControllerDetails controllerClassDetails : controller)
         {
             if(controllerClassDetails.getClassName().equals(model.getControllerClassName()) &&
-                    controllerClassDetails.getPackageName().equals(model.getControllerPackageName()))
+                    controllerClassDetails.getPackageName().equals(model.getControllerPackageName
+                            ()))
             {
                 return controllerClassDetails;
             }
@@ -86,7 +91,8 @@ class PreProcessorHelper
 
     private void error(String message, Object... args)
     {
-        if (args.length > 0) {
+        if(args.length > 0)
+        {
             message = String.format(message, args);
         }
         mEnvironment.getMessager().printMessage(ERROR, message);

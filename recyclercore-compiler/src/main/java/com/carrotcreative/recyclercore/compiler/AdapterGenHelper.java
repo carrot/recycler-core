@@ -23,9 +23,12 @@ class AdapterGenHelper
     private static final String CLASSNAME = "RecyclerCoreAdapter";
     private static final ClassName VIEW = ClassName.get("android.view", "View");
     private static final ClassName VIEW_GROUP = ClassName.get("android.view", "ViewGroup");
-    private static final ClassName LAYOUT_INFLATER = ClassName.get("android.view", "LayoutInflater");
-    private static final ClassName RCAdapter = ClassName.get("com.carrotcreative.recyclercore.adapter", "RecyclerCoreBaseAdapter");
-    private static final ClassName RCController = ClassName.get("com.carrotcreative.recyclercore.adapter", "RecyclerCoreController");
+    private static final ClassName LAYOUT_INFLATER = ClassName.get("android.view",
+            "LayoutInflater");
+    private static final ClassName RCAdapter = ClassName.get("com.carrotcreative.recyclercore" +
+            ".adapter", "RecyclerCoreBaseAdapter");
+    private static final ClassName RCController = ClassName.get("com.carrotcreative.recyclercore" +
+            ".adapter", "RecyclerCoreController");
 
     static JavaFile brewAdapter(Map<ModelDetails, ControllerDetails> map)
     {
@@ -37,10 +40,13 @@ class AdapterGenHelper
                 .addStatement("initModelToViewType()")
                 .build();
 
-        // Create a factory method for controller, that takes the parent view, controller class and returns a new object.
-        ParameterizedTypeName controllerParam = ParameterizedTypeName.get(ClassName.get(Class.class), WildcardTypeName.subtypeOf(Object.class));
+        // Create a factory method for controller, that takes the parent view, controller class
+        // and returns a new object.
+        ParameterizedTypeName controllerParam = ParameterizedTypeName.get(ClassName.get(Class
+                .class), WildcardTypeName.subtypeOf(Object.class));
         ParameterSpec viewGroupParam = ParameterSpec.builder(VIEW_GROUP, "parent").build();
-        MethodSpec.Builder newInstanceControllerMethod = MethodSpec.methodBuilder("newInstanceController")
+        MethodSpec.Builder newInstanceControllerMethod = MethodSpec.methodBuilder
+                ("newInstanceController")
                 .addModifiers(Modifier.PROTECTED)
                 .addAnnotation(Override.class)
                 .returns(RCController)
@@ -52,19 +58,23 @@ class AdapterGenHelper
             newInstanceControllerMethod.beginControlFlow("switch(clazz.getCanonicalName())");
             for(ControllerDetails controller : map.values())
             {
-                ClassName returnCls = ClassName.get(controller.getPackageName(), controller.getClassName());
-                String canonicalName = controller.getPackageName() + "." + controller.getClassName();
+                ClassName returnCls = ClassName.get(controller.getPackageName(), controller
+                        .getClassName());
+                String canonicalName = controller.getPackageName() + "." + controller
+                        .getClassName();
                 newInstanceControllerMethod
-                        .addCode("case $S:\n", canonicalName )
+                        .addCode("case $S:\n", canonicalName)
                         .addStatement(statement, LAYOUT_INFLATER, controller.getLayoutId())
                         .addStatement("return new $T(view)", returnCls);
             }
             newInstanceControllerMethod.endControlFlow();
-            newInstanceControllerMethod.addStatement("throw new IllegalStateException(\"Unregistered Controller requested :\")");
+            newInstanceControllerMethod.addStatement("throw new IllegalStateException" +
+                    "(\"Unregistered Controller requested :\")");
         }
 
         // initModelToViewType that maps the model to its viewtype
-        MethodSpec.Builder initModelToViewTypeBuilder = MethodSpec.methodBuilder("initModelToViewType")
+        MethodSpec.Builder initModelToViewTypeBuilder = MethodSpec.methodBuilder
+                ("initModelToViewType")
                 .addModifiers(Modifier.PRIVATE);
         int index = 0;
         String putModelStatement = "mModelViewTypeMap.put($T.class,$L)";
@@ -73,7 +83,8 @@ class AdapterGenHelper
         {
             ClassName modelCls = ClassName.get(model.getPackageName(), model.getClassName());
             initModelToViewTypeBuilder.addStatement(putModelStatement, modelCls, index);
-            ClassName controllerCls = ClassName.get(model.getControllerPackageName(), model.getControllerClassName());
+            ClassName controllerCls = ClassName.get(model.getControllerPackageName(), model
+                    .getControllerClassName());
             initModelToViewTypeBuilder.addStatement(putControllerStatement, index, controllerCls);
             index++;
         }

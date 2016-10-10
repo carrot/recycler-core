@@ -20,7 +20,7 @@ class ModelDetails
     private final String mControllerPackageName;
 
     private ModelDetails(String className, String packageName, String controllerClassName,
-                 String controllerPackageName)
+                         String controllerPackageName)
     {
         mClassName = className;
         mPackageName = packageName;
@@ -48,7 +48,8 @@ class ModelDetails
         return mControllerPackageName;
     }
 
-    static ModelDetails fromTypeElement(TypeElement typeElement, Elements elementsUtil, Types typesUtil)
+    static ModelDetails fromTypeElement(TypeElement typeElement, Elements elementsUtil, Types
+            typesUtil)
     {
         String pkgName = ClassUtil.getPackageName(typeElement, elementsUtil);
         String clsName = ClassUtil.getClassName(typeElement, pkgName);
@@ -59,7 +60,7 @@ class ModelDetails
             RCModel annotation = typeElement.getAnnotation(RCModel.class);
             annotation.controller();
         }
-        catch (MirroredTypeException ex)
+        catch(MirroredTypeException ex)
         {
             TypeMirror typeMirror = ex.getTypeMirror();
             TypeElement tElement = (TypeElement) typesUtil.asElement(typeMirror);
