@@ -67,9 +67,11 @@ class AdapterGenHelper
                         .addStatement(statement, LAYOUT_INFLATER, controller.getLayoutId())
                         .addStatement("return new $T(view)", returnCls);
             }
+            newInstanceControllerMethod
+                    .addCode("default:\n")
+                    .addStatement("throw new IllegalStateException" +
+                            "(\"Unregistered Controller requested:\" + clazz)");
             newInstanceControllerMethod.endControlFlow();
-            newInstanceControllerMethod.addStatement("throw new IllegalStateException" +
-                    "(\"Unregistered Controller requested :\")");
         }
 
         // initModelToViewType that maps the model to its viewtype
