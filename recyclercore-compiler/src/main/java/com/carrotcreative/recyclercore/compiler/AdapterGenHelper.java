@@ -80,7 +80,7 @@ class AdapterGenHelper
                 .addModifiers(Modifier.PRIVATE);
         int index = 0;
         String putModelStatement = "mModelViewTypeMap.put($T.class,$L)";
-        String putControllerStatement = "mControllerSparseArray.put($L, $T.class);";
+        String putControllerStatement = "mControllerSparseArray.put($L, $T.class)";
         for(ModelDetails model : map.keySet())
         {
             ClassName modelCls = ClassName.get(model.getPackageName(), model.getClassName());
