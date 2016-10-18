@@ -1,9 +1,9 @@
 package com.carrotcreative.recyclercore.compiler;
 
 import com.carrotcreative.recyclercore.annotations.RCController;
+import com.squareup.javapoet.ClassName;
 
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
 
 /**
  * Created by kaushik on 9/30/16.
@@ -11,25 +11,25 @@ import javax.lang.model.util.Elements;
 
 class ControllerDetails
 {
-    String mClassName;
-    String mPackageName;
-    int mLayoutId;
+    private final ClassName mClassName;
+    private final String mCanonicalName;
+    private final int mLayoutId;
 
-    private ControllerDetails(String className, String packageName, int layoutId)
+    private ControllerDetails(ClassName className, String canonicalName, int layoutId)
     {
         mClassName = className;
-        mPackageName = packageName;
+        mCanonicalName = canonicalName;
         mLayoutId = layoutId;
     }
 
-    public String getClassName()
+    public ClassName getClassName()
     {
         return mClassName;
     }
 
-    public String getPackageName()
+    public String getCanonicalName()
     {
-        return mPackageName;
+        return mCanonicalName;
     }
 
     public int getLayoutId()
@@ -37,11 +37,11 @@ class ControllerDetails
         return mLayoutId;
     }
 
-    static ControllerDetails fromTypeElement(TypeElement elem, Elements elementsUtil)
+    static ControllerDetails fromTypeElement(TypeElement elem)
     {
-        String pkgName = ClassUtil.getPackageName(elem, elementsUtil);
-        String clsName = ClassUtil.getClassName(elem, pkgName);
+        ClassName clsName = ClassName.get(elem);
+        String canonName = ClassUtil.getCanonicalName(clsName);
         RCController controller = elem.getAnnotation(RCController.class);
-        return new ControllerDetails(clsName, pkgName, controller.layout());
+        return new ControllerDetails(clsName, canonName, controller.layout());
     }
 }

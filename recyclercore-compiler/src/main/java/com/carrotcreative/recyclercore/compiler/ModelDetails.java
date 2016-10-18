@@ -1,11 +1,11 @@
 package com.carrotcreative.recyclercore.compiler;
 
 import com.carrotcreative.recyclercore.annotations.RCModel;
+import com.squareup.javapoet.ClassName;
 
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 /**
@@ -14,47 +14,37 @@ import javax.lang.model.util.Types;
 
 class ModelDetails
 {
-    private final String mClassName;
-    private final String mPackageName;
-    private final String mControllerClassName;
-    private final String mControllerPackageName;
+    private final ClassName mClassName;
+    private final String mCanonicalName;
+    private final String mControllerCanonicalName;
 
-    private ModelDetails(String className, String packageName, String controllerClassName,
-                         String controllerPackageName)
+    private ModelDetails(ClassName className, String cannonicalName, String controllerCanonicalName)
     {
         mClassName = className;
-        mPackageName = packageName;
-        mControllerClassName = controllerClassName;
-        mControllerPackageName = controllerPackageName;
+        mCanonicalName = cannonicalName;
+        mControllerCanonicalName = controllerCanonicalName;
     }
 
-    public String getClassName()
+    public ClassName getClassName()
     {
         return mClassName;
     }
 
-    public String getPackageName()
+    public String getCanonicalName()
     {
-        return mPackageName;
+        return mCanonicalName;
     }
 
-    public String getControllerClassName()
+    public String getControllerCanonicalName()
     {
-        return mControllerClassName;
+        return mControllerCanonicalName;
     }
 
-    public String getControllerPackageName()
+    static ModelDetails fromTypeElement(TypeElement typeElement, Types typesUtil)
     {
-        return mControllerPackageName;
-    }
-
-    static ModelDetails fromTypeElement(TypeElement typeElement, Elements elementsUtil, Types
-            typesUtil)
-    {
-        String pkgName = ClassUtil.getPackageName(typeElement, elementsUtil);
-        String clsName = ClassUtil.getClassName(typeElement, pkgName);
-        String contPkgName = null;
-        String contClsName = null;
+        ClassName clsName = ClassName.get(typeElement);
+        String cannonName = ClassUtil.getCanonicalName(clsName);
+        String controllerCanonicalName = null;
         try
         {
             RCModel annotation = typeElement.getAnnotation(RCModel.class);
@@ -64,9 +54,10 @@ class ModelDetails
         {
             TypeMirror typeMirror = ex.getTypeMirror();
             TypeElement tElement = (TypeElement) typesUtil.asElement(typeMirror);
-            contPkgName = ClassUtil.getPackageName(tElement, elementsUtil);
-            contClsName = ClassUtil.getClassName(tElement, contPkgName);
+            ClassName controllerCls = ClassName.get(tElement);
+            controllerCanonicalName = ClassUtil.getCanonicalName(controllerCls);
         }
-        return new ModelDetails(clsName, pkgName, contClsName, contPkgName);
+
+        return new ModelDetails(clsName, cannonName, controllerCanonicalName);
     }
 }
