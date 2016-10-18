@@ -58,14 +58,10 @@ class AdapterGenHelper
             newInstanceControllerMethod.beginControlFlow("switch(clazz.getCanonicalName())");
             for(ControllerDetails controller : map.values())
             {
-                ClassName returnCls = ClassName.get(controller.getPackageName(), controller
-                        .getClassName());
-                String canonicalName = controller.getPackageName() + "." + controller
-                        .getClassName();
                 newInstanceControllerMethod
-                        .addCode("case $S:\n", canonicalName)
+                        .addCode("case $S:\n", controller.getCanonicalName())
                         .addStatement(statement, LAYOUT_INFLATER, controller.getLayoutId())
-                        .addStatement("return new $T(view)", returnCls);
+                        .addStatement("return new $T(view)", controller.getClassName());
             }
             newInstanceControllerMethod
                     .addCode("default:\n")
@@ -83,11 +79,9 @@ class AdapterGenHelper
         String putControllerStatement = "mControllerSparseArray.put($L, $T.class)";
         for(ModelDetails model : map.keySet())
         {
-            ClassName modelCls = ClassName.get(model.getPackageName(), model.getClassName());
-            initModelToViewTypeBuilder.addStatement(putModelStatement, modelCls, index);
-            ClassName controllerCls = ClassName.get(model.getControllerPackageName(), model
-                    .getControllerClassName());
-            initModelToViewTypeBuilder.addStatement(putControllerStatement, index, controllerCls);
+            ControllerDetails controller = map.get(model);
+            initModelToViewTypeBuilder.addStatement(putModelStatement, model.getClassName(), index);
+            initModelToViewTypeBuilder.addStatement(putControllerStatement, index, controller.getClassName());
             index++;
         }
 

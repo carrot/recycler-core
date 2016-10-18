@@ -42,8 +42,7 @@ class PreProcessorHelper
         Set<ModelDetails> classSet = new LinkedHashSet<>();
         for(Element element : env.getElementsAnnotatedWith(RCModel.class))
         {
-            ModelDetails clsDetails = ModelDetails.fromTypeElement((TypeElement) element,
-                    mElements, mTypes);
+            ModelDetails clsDetails = ModelDetails.fromTypeElement((TypeElement) element, mTypes);
             classSet.add(clsDetails);
         }
         return classSet;
@@ -54,8 +53,7 @@ class PreProcessorHelper
         Set<ControllerDetails> extendedController = new LinkedHashSet<>();
         for(Element element : env.getElementsAnnotatedWith(RCController.class))
         {
-            ControllerDetails classDetails = ControllerDetails.fromTypeElement((TypeElement)
-                    element, mElements);
+            ControllerDetails classDetails = ControllerDetails.fromTypeElement((TypeElement) element);
             extendedController.add(classDetails);
         }
         return extendedController;
@@ -81,9 +79,7 @@ class PreProcessorHelper
     {
         for(ControllerDetails controllerClassDetails : controller)
         {
-            if(controllerClassDetails.getClassName().equals(model.getControllerClassName()) &&
-                    controllerClassDetails.getPackageName().equals(model.getControllerPackageName
-                            ()))
+            if(controllerClassDetails.getCanonicalName().equals(model.getControllerCanonicalName()))
             {
                 return controllerClassDetails;
             }

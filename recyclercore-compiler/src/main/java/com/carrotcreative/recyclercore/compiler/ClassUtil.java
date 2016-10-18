@@ -1,7 +1,6 @@
 package com.carrotcreative.recyclercore.compiler;
 
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
+import com.squareup.javapoet.ClassName;
 
 /**
  * Created by kaushik on 9/30/16.
@@ -9,14 +8,18 @@ import javax.lang.model.util.Elements;
 
 class ClassUtil
 {
-    static String getClassName(TypeElement type, String packageName)
+    static String getCanonicalName(ClassName className)
     {
-        int packageLen = packageName.length() + 1;
-        return type.getQualifiedName().toString().substring(packageLen).replace('.', '$');
-    }
-
-    static String getPackageName(TypeElement element, Elements elementUtils)
-    {
-        return elementUtils.getPackageOf(element).getQualifiedName().toString();
+        ClassName enclosingClass = className.enclosingClassName();
+        String canonicalName;
+        if(enclosingClass != null)
+        {
+            canonicalName = getCanonicalName(enclosingClass) + "." + className.simpleName();
+        }
+        else
+        {
+            canonicalName = className.packageName() + "." + className.simpleName();
+        }
+        return canonicalName;
     }
 }
