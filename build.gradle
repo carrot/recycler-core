@@ -33,5 +33,12 @@ ext {
 ext.deps = [
         javapoet: 'com.squareup:javapoet:1.6.1',
         autoservice: 'com.google.auto.service:auto-service:1.0-rc2',
-        autocommon: 'com.google.auto:auto-common:0.6'
+        autocommon: 'com.google.auto:auto-common:0.6',
+        lint: 'com.android.tools.lint:lint:24.3.1',
+        lintApi: 'com.android.tools.lint:lint-api:24.3.1',
+        lintChecks: 'com.android.tools.lint:lint-checks:24.3.1',
+        lintTests: 'com.android.tools.lint:lint-tests:24.3.1',
+        testUtils: 'com.android.tools:testutils:24.3.1',
+        mockitoCore: 'org.mockito:mockito-core:1.9.5',
+        junit: 'junit:junit:4.11',
 ]
