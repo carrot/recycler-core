@@ -32,6 +32,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Recycler Core
-    compile project(':recycler-core')
-    apt project(':recyclercore-compiler')
+    compile 'com.carrotcreative.recyclercore:recycler-core:2.0-alpha'
+    apt 'com.carrotcreative.recyclercore:recyclercore-compiler:2.0-alpha'
 }
