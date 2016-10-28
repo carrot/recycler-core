@@ -33,6 +33,6 @@ public class LintRegistryTest
     public void test_validIssues()
     {
         List<Issue> issues = mLintRegistry.getIssues();
-        Assert.assertTrue(issues.contains(InvalidRCModelUsageDetector.DUMMY_ISSUE));
+        Assert.assertTrue(issues.contains(InvalidRCModelUsageJavaDetector.ISSUE_CONTROLLER_WITHOUT_ANNOTATION));
     }
 }

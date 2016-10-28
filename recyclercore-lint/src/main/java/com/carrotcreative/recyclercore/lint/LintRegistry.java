@@ -9,7 +9,7 @@ import java.util.List;
 public class LintRegistry extends IssueRegistry
 {
     private static final List<Issue> mIssues = Arrays.asList(
-            InvalidRCModelUsageDetector.DUMMY_ISSUE
+            InvalidRCModelUsageJavaDetector.ISSUE_CONTROLLER_WITHOUT_ANNOTATION
     );
 
     @Override

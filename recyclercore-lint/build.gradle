@@ -10,7 +10,7 @@ dependencies {
     compile deps.lintChecks
     testCompile deps.junit
     testCompile deps.lintTests
-    testCompile project(':recyclercore-annotations')
+    compile project(':recyclercore-annotations')
 }
 
 jar {
