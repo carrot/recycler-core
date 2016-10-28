@@ -1,5 +1,6 @@
 package com.carrotcreative.recyclercore.compiler;
 
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -29,6 +30,7 @@ class AdapterGenHelper
             ".adapter", "RecyclerCoreBaseAdapter");
     private static final ClassName RCController = ClassName.get("com.carrotcreative.recyclercore" +
             ".adapter", "RecyclerCoreController");
+    private static final ClassName SUPPRESS_LINT = ClassName.get("android.annotation", "SuppressLint");
 
     static JavaFile brewAdapter(Map<ModelDetails, ControllerDetails> map)
     {
@@ -85,7 +87,11 @@ class AdapterGenHelper
             index++;
         }
 
+        AnnotationSpec annotationSpec = AnnotationSpec.builder(SUPPRESS_LINT)
+                .addMember("value", "$S", "ResourceType")
+                .build();
         TypeSpec.Builder result = TypeSpec.classBuilder(CLASSNAME)
+                .addAnnotation(annotationSpec)
                 .addModifiers(Modifier.PUBLIC)
                 .superclass(RCAdapter)
                 .addMethod(constructor)
