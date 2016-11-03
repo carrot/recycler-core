@@ -91,7 +91,7 @@ and pass in the controller and the layout.
 
 ```java
 // ...
-@RCModel(controller = UserListRecyclerController.class)
+@RCModel(controller = UserController.class)
 public class UserModel {
 
     public String mName;
