@@ -24,16 +24,12 @@ import static javax.tools.Diagnostic.Kind.ERROR;
 
 class PreProcessorHelper
 {
-    private Elements mElements;
     private Types mTypes;
-    private Filer mFiler;
     private ProcessingEnvironment mEnvironment;
 
-    PreProcessorHelper(Elements elements, Types types, Filer filer, ProcessingEnvironment env)
+    PreProcessorHelper(Types types, ProcessingEnvironment env)
     {
-        mElements = elements;
         mTypes = types;
-        mFiler = filer;
         mEnvironment = env;
     }
 

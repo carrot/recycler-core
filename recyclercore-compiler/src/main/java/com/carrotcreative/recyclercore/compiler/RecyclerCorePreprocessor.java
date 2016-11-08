@@ -21,7 +21,6 @@ import javax.lang.model.util.Types;
 @AutoService(Processor.class)
 public class RecyclerCorePreprocessor extends AbstractProcessor
 {
-    private Elements mElements;
     private Types mTypes;
     private Filer mFiler;
     private PreProcessorHelper mPreProcessorHelper;
@@ -30,10 +29,9 @@ public class RecyclerCorePreprocessor extends AbstractProcessor
     public synchronized void init(ProcessingEnvironment env)
     {
         super.init(env);
-        mElements = env.getElementUtils();
         mTypes = env.getTypeUtils();
         mFiler = env.getFiler();
-        mPreProcessorHelper = new PreProcessorHelper(mElements, mTypes, mFiler, env);
+        mPreProcessorHelper = new PreProcessorHelper(mTypes, env);
     }
 
     @Override
