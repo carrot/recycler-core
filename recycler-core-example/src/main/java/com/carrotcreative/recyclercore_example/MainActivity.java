@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.carrotcreative.recyclercore.adapter.RecyclerCoreAdapter;
+import com.carrotcreative.recyclercore.RecyclerCoreAdapter;
 import com.carrotcreative.recyclercore.widget.ProgressRecyclerViewLayout;
 import com.carrotcreative.recyclercore_example.net.github.Github;
 import com.carrotcreative.recyclercore_example.net.github.models.GithubUser;
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
         /**
          * Error View
          */
-        View errorView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_error_state, null, false);
+        View errorView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_error_state, mRecyclerViewLayout, false);
         mRecyclerViewLayout.setErrorView(errorView);
 
         mTryAgainButton = (Button) errorView.findViewById(R.id.try_again);
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         /**
          * Empty View
          */
-        View emptyView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_empty_state, null, false);
+        View emptyView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.element_empty_state, mRecyclerViewLayout, false);
         mRecyclerViewLayout.setEmptyStateView(emptyView);
         mLoadAgain = (Button) emptyView.findViewById(R.id.load_again);
         mLoadAgain.setOnClickListener(new View.OnClickListener()

@@ -30,7 +30,7 @@ public class RecyclerCoreRecyclerView extends RecyclerView
         super.setAdapter(adapter);
         throw new IllegalStateException("Invalid usage of setAdapter. Use " +
                 ProgressRecyclerViewLayout.class.getSimpleName() +
-                ".setAdapter(RecyclerCoreAdapter adapter) to Set the adapter");
+                ".setAdapter(RecyclerCoreBaseAdapter adapter) to Set the adapter");
     }
 
     void setCoreAdapter(Adapter adapter)

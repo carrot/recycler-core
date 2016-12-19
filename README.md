@@ -10,10 +10,33 @@ Recycler-Core attempts to solve the maintainability and reusability problems tha
 
 Download
 --------
+Configure the project-level `build.gradle` to include the 'android-apt' plugin
+```groovy
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    ...
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+  }
+}
+```
+
+Then, apply the 'android-apt' plugin in the module-level `build.gradle` and add the Recycler-Core dependencies:
 
 Gradle:
 ```groovy
-compile 'com.carrotcreative.recyclercore:recycler-core:1.0.8'
+apply plugin: 'com.neenbedankt.android-apt'
+
+android {
+  ...
+}
+
+dependencies {
+  compile 'com.carrotcreative.recyclercore:recycler-core:2.0-alpha'
+  apt 'com.carrotcreative.recyclercore:recyclercore-compiler:2.0-alpha'
+}
 ```
 
 ## Usage
@@ -68,7 +91,7 @@ and pass in the controller and the layout.
 
 ```java
 // ...
-@InjectController(controller = UserController.class, layout = R.layout.element_user)
+@RCModel(controller = UserController.class)
 public class UserModel {
 
     public String mName;
@@ -91,6 +114,7 @@ The magic happens in the `bind` method, where this object will be passed an inst
 
 ```java
 // ...
+@RCController(layout = R.layout.element_user_list)
 public class UserController extends RecyclerCoreController<UserModel> {
 
     private TextView mName;
@@ -131,7 +155,7 @@ UserModel rob = new UserModel()
         .setName("Rob");
 models.add(rob);
 
-RecyclerCoreAdapter adapter = new RecyclerCoreAdapter(models, this);
+RecyclerCoreAdapter adapter = new RecyclerCoreAdapter(models);
 mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 mRecyclerView.setAdapter(adapter);
 ```
